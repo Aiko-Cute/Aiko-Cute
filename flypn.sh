@@ -185,6 +185,15 @@ install_XrayR() {
     echo "---------------------------"
     echo ""
 
+    # tên api key 
+    echo "tên api key của bạn trên web"
+    read -p "Vui lòng nhập node ID :" nameapikey
+    [ -z "${nameapikey}" ]
+    echo "---------------------------"
+    echo " Api key bạn là ${nameapikey}"
+    echo "---------------------------"
+    echo ""
+
     # Đặt số nút
     echo "Đặt số nút Trên Web V2Board"
     echo ""
@@ -195,44 +204,35 @@ install_XrayR() {
     echo "---------------------------"
     echo ""
 
-
-    #giới hạn thiết bị
-    echo "Giới hạn thiết bị"
-    echo ""
-    read -p "Vui lòng nhập Số thiết bị tối đa : " DeviceLimit
-    [ -z "${DeviceLimit}" ]
-    echo "---------------------------"
-    echo "Số thiết bị sử dụng: ${Devicelimit}"
-    echo "---------------------------"
-    echo ""
-
     #cloudflare
-    echo "Cloudflare"
+    echo "Cloudflare Email"
     echo ""
-    read -p "Vui lòng nhập Cloudflare Email : " CloudflareEmail
-    [ -z "${CloudflareEmail}" ]
+    read -p "Vui lòng nhập Cloudflare Email : " CLOUDFLARE_EMAIL
+    [ -z "${CLOUDFLARE_EMAIL}" ]
     echo "---------------------------"
-    echo "Cloudflare Email: ${CloudflareEmail}"
+    echo "Cloudflare Email: ${CLOUDFLARE_EMAIL}"
     echo "---------------------------"
+    echo ""
 
     #cloudflare api key
     echo "Cloudflare API Key"
     echo ""
-    read -p "Vui lòng nhập Cloudflare API Key : " CloudflareAPIKey
-    [ -z "${CloudflareAPIKey}" ]
+    read -p "Vui lòng nhập Cloudflare API Key : " CLOUDFLARE_API_KEY
+    [ -z "${CLOUDFLARE_API_KEY}" ]
     echo "---------------------------"
-    echo "Cloudflare API Key: ${CloudflareAPIKey}"
+    echo "Cloudflare API Key: ${CLOUDFLARE_API_KEY}"
     echo "---------------------------"
-
+    echo ""
 
     # Writing config.yml
     echo "Đang cố gắng ghi tệp cấu hình ..."
     wget https://raw.githubusercontent.com/Aiko-Cute/Aiko-Cute/flypn/config.yml -O /etc/XrayR/config.yml
     sed -i "s/ApiHost:.*/ApiHost: ${namewweb}/g" /etc/XrayR/config.yml
+    sed -i "s/ApiKey:.*/ApiKey: ${nameapikey}/g" /etc/XrayR/config.yml
     sed -i "s/NodeID:.*/NodeID: ${node_id}/g" /etc/XrayR/config.yml
     sed -i "s/DeviceLimit:.*/DeviceLimit: ${DeviceLimit}/g" /etc/XrayR/config.yml
-    sed -i "s/CloudflareEmail:.*/CloudflareEmail: ${CLOUDFLARE_EMAIL}/g" /etc/XrayR/config.yml
-    sed -i "s/CloudflareAPIKey:.*/CloudflareAPIKey: ${CLOUDFLARE_API_KEY}/g" /etc/XrayR/config.yml
+    sed -i "s/CLOUDFLARE_EMAIL:.*/CLOUDFLARE_EMAIL: ${CLOUDFLARE_EMAIL}/g" /etc/XrayR/config.yml
+    sed -i "s/CLOUDFLARE_API_KEY:.*/CLOUDFLARE_API_KEY: ${CLOUDFLARE_API_KEY}/g" /etc/XrayR/config.yml
 
     echo ""
 

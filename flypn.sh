@@ -178,7 +178,7 @@ install_XrayR() {
     
     # tên web 
     echo "Tên Web "
-    read -p "Vui lòng nhập Tên Web :" namewweb
+    read -p "Vui lòng nhập Tên Web (https://aikocute.com) :" namewweb
     [ -z "${namewweb}" ]
     echo "---------------------------"
     echo " Web bạn là ${namewweb}"
@@ -203,6 +203,16 @@ install_XrayR() {
     echo "Node ID của bạn đặt là: ${node_id}"
     echo "---------------------------"
     echo ""
+
+    #crep domain name
+    echo "Tên miền của bạn "
+    read -p "Vui lòng nhập tên miền (CertDomain):" CertDomain
+    [ -z "${CertDomain}" ]
+    echo "---------------------------"
+    echo "Tên miền của bạn là: ${CertDomain}"
+    echo "---------------------------"
+    echo ""
+
 
     #cloudflare
     echo "Cloudflare Email"
@@ -231,6 +241,7 @@ install_XrayR() {
     sed -i "s/ApiKey:.*/ApiKey: ${nameapikey}/g" /etc/XrayR/config.yml
     sed -i "s/NodeID:.*/NodeID: ${node_id}/g" /etc/XrayR/config.yml
     sed -i "s/DeviceLimit:.*/DeviceLimit: ${DeviceLimit}/g" /etc/XrayR/config.yml
+    sed -i "s/CertDomain:.*/CertDomain: ${CertDomain}/g" /etc/XrayR/config.yml
     sed -i "s/CLOUDFLARE_EMAIL:.*/CLOUDFLARE_EMAIL: ${CLOUDFLARE_EMAIL}/g" /etc/XrayR/config.yml
     sed -i "s/CLOUDFLARE_API_KEY:.*/CLOUDFLARE_API_KEY: ${CLOUDFLARE_API_KEY}/g" /etc/XrayR/config.yml
 

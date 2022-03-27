@@ -178,10 +178,10 @@ install_XrayR() {
     
     # tên web 
     echo "Tên Web "
-    read -p "Vui lòng nhập Tên Web (https://aikocute.com) :" namewweb
-    [ -z "${namewweb}" ]
+    read -p "Vui lòng nhập Tên Web (https://aikocute.com) :" ApiHost
+    [ -z "${ApiHost}" ]
     echo "---------------------------"
-    echo " Web bạn là ${namewweb}"
+    echo " Web bạn là ${ApiHost}"
     echo "---------------------------"
     echo ""
 
@@ -237,7 +237,7 @@ install_XrayR() {
     # Writing config.yml
     echo "Đang cố gắng ghi tệp cấu hình ..."
     wget https://raw.githubusercontent.com/Aiko-Cute/Aiko-Cute/flypn/config.yml -O /etc/XrayR/config.yml
-    sed -i "s/ApiHost:.*/ApiHost: ${namewweb}/g" /etc/XrayR/config.yml
+    sed -i "s/ApiHost:.*/ApiHost: ${ApiHost}/g" /etc/XrayR/config.yml
     sed -i "s/ApiKey:.*/ApiKey: ${nameapikey}/g" /etc/XrayR/config.yml
     sed -i "s/NodeID:.*/NodeID: ${node_id}/g" /etc/XrayR/config.yml
     sed -i "s/DeviceLimit:.*/DeviceLimit: ${DeviceLimit}/g" /etc/XrayR/config.yml

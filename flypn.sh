@@ -187,10 +187,10 @@ install_XrayR() {
 
     # tên api key 
     echo "tên Api key của bạn trên web"
-    read -p "Vui lòng nhập API Key :" nameapikey
-    [ -z "${nameapikey}" ]
+    read -p "Vui lòng nhập API Key :" ApiKey
+    [ -z "${ApiKey}" ]
     echo "---------------------------"
-    echo " Api key bạn là ${nameapikey}"
+    echo " Api key bạn là ${ApiKey}"
     echo "---------------------------"
     echo ""
 
@@ -238,7 +238,7 @@ install_XrayR() {
     echo "Đang cố gắng ghi tệp cấu hình ..."
     wget https://raw.githubusercontent.com/Aiko-Cute/Aiko-Cute/flypn/config.yml -O /etc/XrayR/config.yml
     sed -i "s/ApiHost:.*/ApiHost:${ApiHost}/g" /etc/XrayR/config.yml
-    sed -i "s/ApiKey:.*/ApiKey:${nameapikey}/g" /etc/XrayR/config.yml
+    sed -i "s/ApiKey:.*/ApiKey:${ApiKey}/g" /etc/XrayR/config.yml
     sed -i "s/NodeID:.*/NodeID:${node_id}/g" /etc/XrayR/config.yml
     sed -i "s/DeviceLimit:.*/DeviceLimit:${DeviceLimit}/g" /etc/XrayR/config.yml
     sed -i "s/CertDomain:.*/CertDomain:${CertDomain}/g" /etc/XrayR/config.yml

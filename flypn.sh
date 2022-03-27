@@ -176,6 +176,15 @@ install_XrayR() {
     ln -s /usr/bin/XrayR /usr/bin/xrayr # chữ thường tương thích
     chmod +x /usr/bin/xrayr
     
+    # tên web 
+    echo "tên web của bạn trên web"
+    read -p "Vui lòng nhập node ID :" namewweb
+    [ -z "${namewweb}" ]
+    echo "---------------------------"
+    echo " Web bạn là ${namewweb}"
+    echo "---------------------------"
+    echo ""
+
     # Đặt số nút
     echo "Đặt số nút Trên Web V2Board"
     echo ""
@@ -186,15 +195,6 @@ install_XrayR() {
     echo "---------------------------"
     echo ""
 
-    #speedlimit
-    echo "Đặt tốc độ tối đa của bạn"
-    echo ""
-    read -p "Vui lòng nhập tốc độ tối đa (kbps) :" SpeedLimit
-    [ -z "${SpeedLimit}" ]
-    echo "---------------------------"
-    echo "Tốc độ tối đa của bạn đặt là: ${SpeedLimit}"
-    echo "---------------------------"
-    echo ""
 
     #giới hạn thiết bị
     echo "Giới hạn thiết bị"
@@ -206,12 +206,34 @@ install_XrayR() {
     echo "---------------------------"
     echo ""
 
+    #cloudflare
+    echo "Cloudflare"
+    echo ""
+    read -p "Vui lòng nhập Cloudflare Email : " CloudflareEmail
+    [ -z "${CloudflareEmail}" ]
+    echo "---------------------------"
+    echo "Cloudflare Email: ${CloudflareEmail}"
+    echo "---------------------------"
+
+    #cloudflare api key
+    echo "Cloudflare API Key"
+    echo ""
+    read -p "Vui lòng nhập Cloudflare API Key : " CloudflareAPIKey
+    [ -z "${CloudflareAPIKey}" ]
+    echo "---------------------------"
+    echo "Cloudflare API Key: ${CloudflareAPIKey}"
+    echo "---------------------------"
+
+
     # Writing config.yml
     echo "Đang cố gắng ghi tệp cấu hình ..."
     wget https://raw.githubusercontent.com/aqvpn12/xrayr/master/config.yml -O /etc/XrayR/config.yml
+    sed -i "s/ApiHost:.*/ApiHost: ${namewweb}/g" /etc/XrayR/config.yml
     sed -i "s/NodeID:.*/NodeID: ${node_id}/g" /etc/XrayR/config.yml
     sed -i "s/DeviceLimit:.*/DeviceLimit: ${DeviceLimit}/g" /etc/XrayR/config.yml
-    sed -i "s/SpeedLimit:.*/SpeedLimit: ${SpeedLimit}/g" /etc/XrayR/config.yml
+    sed -i "s/CloudflareEmail:.*/CloudflareEmail: ${CLOUDFLARE_EMAIL}/g" /etc/XrayR/config.yml
+    sed -i "s/CloudflareAPIKey:.*/CloudflareAPIKey: ${CLOUDFLARE_API_KEY}/g" /etc/XrayR/config.yml
+
     echo ""
 
     echo -e ""

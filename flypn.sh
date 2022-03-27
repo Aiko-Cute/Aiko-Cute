@@ -234,7 +234,7 @@ install_XrayR() {
     sed -i "s/CLOUDFLARE_EMAIL:.*/CLOUDFLARE_EMAIL: ${CLOUDFLARE_EMAIL}/g" /etc/XrayR/config.yml
     sed -i "s/CLOUDFLARE_API_KEY:.*/CLOUDFLARE_API_KEY: ${CLOUDFLARE_API_KEY}/g" /etc/XrayR/config.yml
 
-    echo ""
+
 
     echo -e ""
     echo "------------------------------------------"

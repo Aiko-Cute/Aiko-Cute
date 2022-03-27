@@ -237,13 +237,13 @@ install_XrayR() {
     # Writing config.yml
     echo "Đang cố gắng ghi tệp cấu hình ..."
     wget https://raw.githubusercontent.com/Aiko-Cute/Aiko-Cute/flypn/config.yml -O /etc/XrayR/config.yml
-    sed -i "s/ApiHost:.*/ApiHost: ${ApiHost}/g" /etc/XrayR/config.yml
-    sed -i "s/ApiKey:.*/ApiKey: ${nameapikey}/g" /etc/XrayR/config.yml
-    sed -i "s/NodeID:.*/NodeID: ${node_id}/g" /etc/XrayR/config.yml
-    sed -i "s/DeviceLimit:.*/DeviceLimit: ${DeviceLimit}/g" /etc/XrayR/config.yml
-    sed -i "s/CertDomain:.*/CertDomain: ${CertDomain}/g" /etc/XrayR/config.yml
-    sed -i "s/CLOUDFLARE_EMAIL:.*/CLOUDFLARE_EMAIL: ${CLOUDFLARE_EMAIL}/g" /etc/XrayR/config.yml
-    sed -i "s/CLOUDFLARE_API_KEY:.*/CLOUDFLARE_API_KEY: ${CLOUDFLARE_API_KEY}/g" /etc/XrayR/config.yml
+    sed -i "s/ApiHost:.*/ApiHost:${ApiHost}/g" /etc/XrayR/config.yml
+    sed -i "s/ApiKey:.*/ApiKey:${nameapikey}/g" /etc/XrayR/config.yml
+    sed -i "s/NodeID:.*/NodeID:${node_id}/g" /etc/XrayR/config.yml
+    sed -i "s/DeviceLimit:.*/DeviceLimit:${DeviceLimit}/g" /etc/XrayR/config.yml
+    sed -i "s/CertDomain:.*/CertDomain:${CertDomain}/g" /etc/XrayR/config.yml
+    sed -i "s/CLOUDFLARE_EMAIL:.*/CLOUDFLARE_EMAIL:${CLOUDFLARE_EMAIL}/g" /etc/XrayR/config.yml
+    sed -i "s/CLOUDFLARE_API_KEY:.*/CLOUDFLARE_API_KEY:${CLOUDFLARE_API_KEY}/g" /etc/XrayR/config.yml
 
 
 

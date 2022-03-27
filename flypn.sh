@@ -177,8 +177,8 @@ install_XrayR() {
     chmod +x /usr/bin/xrayr
     
     # tên web 
-    echo "tên web của bạn trên web"
-    read -p "Vui lòng nhập node ID :" namewweb
+    echo "Tên Web "
+    read -p "Vui lòng nhập Tên Web :" namewweb
     [ -z "${namewweb}" ]
     echo "---------------------------"
     echo " Web bạn là ${namewweb}"
@@ -186,8 +186,8 @@ install_XrayR() {
     echo ""
 
     # tên api key 
-    echo "tên api key của bạn trên web"
-    read -p "Vui lòng nhập node ID :" nameapikey
+    echo "tên Api key của bạn trên web"
+    read -p "Vui lòng nhập API Key :" nameapikey
     [ -z "${nameapikey}" ]
     echo "---------------------------"
     echo " Api key bạn là ${nameapikey}"
@@ -195,7 +195,7 @@ install_XrayR() {
     echo ""
 
     # Đặt số nút
-    echo "Đặt số nút Trên Web V2Board"
+    echo "Đặt số nút Trên Web"
     echo ""
     read -p "Vui lòng nhập node ID :" node_id
     [ -z "${node_id}" ]

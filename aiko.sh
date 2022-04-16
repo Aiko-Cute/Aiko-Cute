@@ -198,7 +198,7 @@ install_XrayR() {
         echo -e "[9] Node :09 - 04.vn.aikocute.com - VN4"
         echo -e "[10] Node :10 - Trống - ID"
         echo -e "[11] Node :11 - garena.aikocute.com - VN"
-        echo -e " Nhấn enter để chuyển sang chế độ nhập"
+        echo -e " Nhấn enter để chuyển sang chế độ nhập - Vmess"
         echo -e "-------------------------"
         read -p "Vui lòng chọn config cấu hình: " choose_node
 
@@ -322,17 +322,8 @@ install_XrayR() {
     echo -e "${green}Node ID của bạn đặt là: ${aiko_node_id}${plain}"
     echo -e "-------------------------"
 
-    read -p "Vui lòng Nhập domain :" aiko_domain
-    [ -z "${aiko_domain}" ]
-    echo -e "${green}Tên miền của bạn đặt là: ${aiko_domain}${plain}"
-    echo "---------------------------"
-
-
-    nano /root/cert/server.pem
-    nano /root/cert/privkey.pem
     wget https://raw.githubusercontent.com/AikoCute/Aiko-Config/aiko/Config-Trojan%2BVmess.yml -O /etc/XrayR/config.yml
     sed -i "s/NodeID:.*/NodeID: ${aiko_node_id}/g" /etc/XrayR/config.yml
-    sed -i "s/CertDomain:.*/CertDomain: ${aiko_domain}/g" /etc/XrayR/config.yml
     
     fi
     elif [ "$choose" == "2" ]; then 

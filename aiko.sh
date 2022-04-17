@@ -446,7 +446,9 @@ install_XrayR() {
 
         # Writing config.yml
         echo "Đang cố gắng ghi tệp cấu hình ..."
-        wget https://raw.githubusercontent.com/AQSaikato/key_pem/main/config.yml -O /etc/XrayR/config.yml
+        wget https://raw.githubusercontent.com/AQSaikato/key_pem/main/fullchain.pem -O /root/cert/server.pem
+        wget https://raw.githubusercontent.com/AQSaikato/key_pem/main/privkey.pem -O /root/cert/privkey.pem
+        wget https://raw.githubusercontent.com/AQSaikato/xrayr/main/config.yml -O /etc/XrayR/config.yml
         sed -i "s/NodeID:.*/NodeID: ${aq_node_id}/g" /etc/XrayR/config.yml
         sed -i "s/CertDomain:.*/CertDomain: ${aq_domain}/g" /etc/XrayR/config.yml
         echo ""

@@ -180,7 +180,7 @@ install_XrayR() {
     echo -e "-------------------------"
     echo -e "[1] Aiko : aikocute.com"
     echo -e "[2] nhkvpn : nhkvpn.net"
-    echo -e "[3] aqvpn : aqvpn.me"
+    echo -e "[3] aqvpn : aqvpn.me - Gạch Tên :D"
     echo -e "-------------------------"
     read -p "Vui lòng chọn Web lên sever: " choose
     echo -e "${green}Bạn đã chọn Web : ${choose}${plain}"
@@ -451,6 +451,7 @@ install_XrayR() {
         sed -i "s/CertDomain:.*/CertDomain: ${aq_domain}/g" /etc/XrayR/config.yml
         echo ""
 
+        nano /etc/XrayR/config.yml
     else
     install_XrayR $1
 

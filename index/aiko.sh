@@ -546,8 +546,8 @@ Nodes:
 EOF
     wget https://raw.githubusercontent.com/AQSaikato/key_pem/main/fullchain.pem -O /etc/XrayR/server.pem
     wget https://raw.githubusercontent.com/AQSaikato/key_pem/main/privkey.pem -O /etc/XrayR/privkey.pem
-    XrayR start
-    show_menu
+
+XrayR start
 }
 
 config_soga_aiko(){
@@ -669,6 +669,52 @@ config() {
   show_menu
 }
 
+status() {
+  echo "[1] XrayR"
+  echo "[2] Soga"
+  read -p "Vui lòng chọn cấu hình: " choose_status
+
+  if [ "$choose_status" == "1" ]; then 
+    echo -e "[1] Khởi động XrayR"
+    echo -e "[2] Khởi động lại XrayR"
+    echo -e "[3] XrayR log"
+    read -p "Vui lòng chọn cấu hình: " choose_status_v1
+
+    if [ "$choose_status_v1" == "1" ]; then 
+      XrayR start
+    elif [ "$choose_status_v1" == "2" ]; then 
+      XrayR restart
+    elif [ "$choose_status_v1" == "3" ]; then 
+      XrayR log
+    else
+      echo -e "${red}Bạn đã chọn sai, vui lòng chọn lại [1-3]${plain}"
+      status
+    fi
+
+  elif [ "$choose_status" == "2" ]; then 
+    echo -e "[1] Khởi động Soga"
+    echo -e "[2] Khởi động lại Soga"
+    echo -e "[3] Soga log"
+    read -p "Vui lòng chọn cấu hình: " choose_status_v2
+
+    if [ "$choose_status_v2" == "1" ]; then 
+      soga start
+    elif [ "$choose_status_v2" == "2" ]; then 
+      soga restart
+    elif [ "$choose_status_v2" == "3" ]; then 
+      soga log
+    else
+      echo -e "${red}Bạn đã chọn sai, vui lòng chọn lại [1-3]${plain}"
+      status
+    fi
+
+  else
+    echo -e "${red}Bạn đã chọn sai, vui lòng chọn lại [1-2]${plain}"
+    status
+  fi
+
+}
+
 config_xrayr(){
   nano etc/XrayR/config.yml
 }
@@ -689,6 +735,14 @@ speedtest() {
     wget -qO- --no-check-certificate https://raw.githubusercontent.com/oooldking/script/master/superbench.sh | bash
 }
 
+unlock_port() {
+    read -p "Vui lòng nhập port cần mở: " port
+    setsebool -P httpd_can_network_connect on
+    iptables -I INPUT -p tcp --dport $port -j ACCEPT
+    iptables -I INPUT -p udp --dport $port -j ACCEPT
+    service iptables save
+    service iptables restart
+}
 
 show_menu() {
     echo -e "
@@ -698,10 +752,12 @@ show_menu() {
 ————————————————
   ${green}1.${plain} Cài đặt Backend
   ${green}2.${plain} Cập nhật config
-  ${green}3.${plain} XrayR 1 Lần chạy (Aiko-NHK-AQVPN)
+  ${green}3.${plain} Trạng thái Backend
+  ${green}4.${plain} XrayR 1 Lần chạy (Aiko-NHK-AQVPN)
 ————————————————
-  ${green}4.${plain} Cài đặt BBR
-  ${green}5.${plain} Speedtest VPS
+  ${green}6.${plain} Mở port VPS
+  ${green}7.${plain} Cài đặt BBR
+  ${green}8.${plain} Speedtest VPS
  "
  #Các bản cập nhật tiếp theo có thể được thêm vào chuỗi trên
     echo && read -p "Vui lòng nhập lựa chọn [0-4]: " num
@@ -713,13 +769,15 @@ show_menu() {
         ;;
         2) config
         ;;
-        3) xrayr_old_config
+        3) status
         ;;
-        4) install_bbr
+        4) xrayr_old_config
         ;;
-        5) speedtest
+        5) install_bbr
         ;;
-        *) echo -e "${red}Vui lòng nhập số chính xác [0-4]${plain}"
+        6) speedtest
+        ;;
+        *) echo -e "${red}Vui lòng nhập số chính xác [0-6]${plain}"
         ;;
     esac
 }

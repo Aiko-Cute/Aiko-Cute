@@ -83,8 +83,9 @@ before_show_menu() {
     show_menu
 }
 
-install() {
-    bash <(curl -Ls https://raw.githubusercontent.com/AikoCute/Aiko-release/master/install.sh)
+install_XrayR_soga() {
+    bash -c <(curl -Ls https://github.com/AikoCute/XrayR-release/raw/data/install.sh) @ install
+    bash <(curl -Ls https://raw.githubusercontent.com/AikoCute/Aiko-install/master/install.sh)
     if [[ $? == 0 ]]; then
         if [[ $# == 0 ]]; then
             start
@@ -372,27 +373,7 @@ show_aiko_version() {
 }
 
 show_usage() {
-    echo " aiko Cách sử dụng tập lệnh quản lý (tương thích với thực thi aiko, không phân biệt chữ hoa chữ thường): "
-    echo " aikoCute Hột Me"
-    echo "------------------------------------------"
-    echo "  aiko                    - Hiển thị menu quản lý (nhiều chức năng hơn)"
-    echo "  aiko start              - Khởi động aiko"
-    echo "  aiko stop               - Dừng aiko"
-    echo "  aiko restart            - Khởi động lại aiko"
-    echo "  aiko status             - Kiểm tra trạng thái aiko"
-    echo "  aiko enable             - Kích hoạt aiko"
-    echo "  aiko disable            - Hủy tự động khởi động aiko"
-    echo "  aiko log                - Xem nhật ký aiko"
-    echo "  aiko update             - Cập nhật aiko"
-    echo "  aiko update x.x.x       - Cập nhật phiên bản được chỉ định aiko"
-    echo "  aiko config             - Hiển thị nội dung tệp cấu hình"
-    echo "  aiko install            - Cài đặt aiko"
-    echo "  aiko uninstall          - Gỡ cài đặt aiko"
-    echo "  aiko speedtest          - Thử nghiệm tốc độ"
-    echo "  aiko bbr                - install BBR"
-    echo "  aiko version            - Xem các phiên bản aiko"
-    echo "  aikoCute Hotme           - Lệnh Này méo có đâu nên đừng sài"
-    echo "------------------------------------------"
+     echo -n "AikoCute Hotme"
 }
 
 show_menu() {
@@ -401,7 +382,7 @@ show_menu() {
 --- https://github.com/aiko-project/aiko ---
   ${green}0.${plain} Sửa đổi cấu hình
 ————————————————
-  ${green}1.${plain} Cài đặt aiko
+  ${green}1.${plain} Cài đặt install_XrayR_soga
   ${green}2.${plain} Cập nhật aiko
   ${green}3.${plain} Gỡ cài đặt aiko
 ————————————————
@@ -426,7 +407,7 @@ show_menu() {
     case "${num}" in
         0) config
         ;;
-        1) check_uninstall && install
+        1) check_uninstall && install_XrayR_soga
         ;;
         2) check_install && update
         ;;

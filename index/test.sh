@@ -10,342 +10,309 @@ version="v1.0.0"
 # check root
 [[ $EUID -ne 0 ]] && echo -e "${red}Lỗi: ${plain} Bắt đầu lại với quyền root！\n" && exit 1
 
-# check os
-if [[ -f /etc/redhat-release ]]; then
-    release="centos"
-elif cat /etc/issue | grep -Eqi "debian"; then
-    release="debian"
-elif cat /etc/issue | grep -Eqi "ubuntu"; then
-    release="ubuntu"
-elif cat /etc/issue | grep -Eqi "centos|red hat|redhat"; then
-    release="centos"
-elif cat /proc/version | grep -Eqi "debian"; then
-    release="debian"
-elif cat /proc/version | grep -Eqi "ubuntu"; then
-    release="ubuntu"
-elif cat /proc/version | grep -Eqi "centos|red hat|redhat"; then
-    release="centos"
-else
-    echo -e "${red}Phiên bản hệ thống không được phát hiện, vui lòng liên hệ với tác giả tập lệnh!${plain}\n" && exit 1
-fi
+install() {
+    echo -e "-------------------------"
+    echo -e "1. Cài đặt ${green}XrayR${plain}"
+    echo -e "2. Cài đặt ${green}Soga${plain}"
+    echo -e "3. Cài đặt ${green}Soga-XrayR${plain}"
+    echo -e "4. Cài đặt ${green}X-ui${plain}"
+    read -p "Vui lòng chọn config cấu hình: " installv1
 
-os_version=""
+    if [ "$installv1" == "1" ]; then 
+        bash <(curl -ls https://github.com/AikoCute/XrayR-release/raw/data/install.sh)
 
-# os version
-if [[ -f /etc/os-release ]]; then
-    os_version=$(awk -F'[= ."]' '/VERSION_ID/{print $3}' /etc/os-release)
-fi
-if [[ -z "$os_version" && -f /etc/lsb-release ]]; then
-    os_version=$(awk -F'[= ."]+' '/DISTRIB_RELEASE/{print $2}' /etc/lsb-release)
-fi
+    elif [ "$installv1" == "2" ]; then
+        bash <(curl -Ls https://raw.githubusercontent.com/vaxilu/soga/master/install.sh)
+    
+    elif [ "$installv1" == "3" ]; then
+        bash <(curl -ls https://github.com/AikoCute/XrayR-release/blob/data/install.sh)
+        bash <(curl -Ls https://raw.githubusercontent.com/vaxilu/soga/master/install.sh)
 
-if [[ x"${release}" == x"centos" ]]; then
-    if [[ ${os_version} -le 6 ]]; then
-        echo -e "${red}Vui lòng sử dụng CentOS 7 trở lên！${plain}\n" && exit 1
-    fi
-elif [[ x"${release}" == x"ubuntu" ]]; then
-    if [[ ${os_version} -lt 16 ]]; then
-        echo -e "${red}Vui lòng sử dụng Ubuntu 16 trở lên！${plain}\n" && exit 1
-    fi
-elif [[ x"${release}" == x"debian" ]]; then
-    if [[ ${os_version} -lt 8 ]]; then
-        echo -e "${red}Vui lòng sử dụng Debian 8 trở lên！${plain}\n" && exit 1
-    fi
-fi
-
-confirm() {
-    if [[ $# > 1 ]]; then
-        echo && read -p "$1 [Mặc định$2]: " temp
-        if [[ x"${temp}" == x"" ]]; then
-            temp=$2
-        fi
     else
-        read -p "$1 [y/n]: " temp
-    fi
-    if [[ x"${temp}" == x"y" || x"${temp}" == x"Y" ]]; then
-        return 0
-    else
-        return 1
+    install
+
     fi
 }
 
-confirm_restart() {
-    confirm "Có khởi động lại aiko hay không" "y"
-    if [[ $? == 0 ]]; then
-        restart
+config_aikovpn_xrayr() {
+    echo -e "-------------------------"
+    echo -e "[1] Node :01 - 01.hk.aikocute.com - HK"
+    echo -e "[2] Node :02 - 01.sing.aikocute.com - SG"
+    echo -e "[3] Node :03 - 01.vn.aikocute.com - VN1"
+    echo -e "[4] Node :04 - 02.vn.aikocute.com - VN2"
+    echo -e "[5] Node :05 - 01.jp.aikocute.com - JP"
+    echo -e "[6] Node :06 - 01.us.aikocute.com - US"
+    echo -e "[7] Node :07 - 03.vn.aikocute.com - VN3"
+    echo -e "[8] Node :08 - 02.sing.aikocute.com - SG"
+    echo -e "[9] Node :09 - 04.vn.aikocute.com - VN4"
+    echo -e " Nhấn enter để chuyển sang chế độ nhập - Vmess"
+    echo -e "-------------------------"
+    read -p "Vui lòng chọn config cấu hình: " choose_node
+
+
+    if [ "$choose_node" == "1" ]; then 
+    # Đặt số nút
+    node_id="1"
+    domain="01.hk.aikocute.com"
+
+    #Ghi file
+    wget https://raw.githubusercontent.com/AikoCute/aiko-pem/aiko/Pem/HK-01/01.hk.pem -O /root/cert/server.pem
+    wget https://raw.githubusercontent.com/AikoCute/aiko-pem/aiko/Pem/HK-01/01.hk-privkey.pem -O /root/cert/privkey.pem
+    wget https://raw.githubusercontent.com/AikoCute/Aiko-Config/aiko/Config-Trojan%2BVmess.yml -O /etc/XrayR/config.yml
+    sed -i "s/NodeID:.*/NodeID: ${node_id}/g" /etc/XrayR/config.yml
+    sed -i "s/CertDomain:.*/CertDomain: ${domain}/g" /etc/XrayR/config.yml
+    
+    elif [ "$choose_node" == "2" ]; then 
+    node_id="2"
+    domain="01.sing.aikocute.com"
+
+    wget https://raw.githubusercontent.com/AikoCute/aiko-pem/aiko/Pem/SG-01/01.sing.pem -O /root/cert/server.pem
+    wget https://raw.githubusercontent.com/AikoCute/aiko-pem/aiko/Pem/SG-01/01.sing-privkey.pem -O /root/cert/privkey.pem
+    wget https://raw.githubusercontent.com/AikoCute/Aiko-Config/aiko/Config-Trojan%2BVmess.yml -O /etc/XrayR/config.yml
+    sed -i "s/NodeID:.*/NodeID: ${node_id}/g" /etc/XrayR/config.yml
+    sed -i "s/CertDomain:.*/CertDomain: ${domain}/g" /etc/XrayR/config.yml
+    
+    elif [ "$choose_node" == "3" ]; then
+    node_id="3"
+    domain="01.vn.aikocute.com"
+
+    wget https://raw.githubusercontent.com/AikoCute/aiko-pem/aiko/Pem/VN-01/01.vn.pem -O /root/cert/server.pem
+    wget https://raw.githubusercontent.com/AikoCute/aiko-pem/aiko/Pem/VN-01/01.vn-privkey.pem -O /root/cert/privkey.pem
+    wget https://raw.githubusercontent.com/AikoCute/Aiko-Config/aiko/Config-Trojan%2BVmess.yml -O /etc/XrayR/config.yml
+    sed -i "s/NodeID:.*/NodeID: ${node_id}/g" /etc/XrayR/config.yml
+    sed -i "s/CertDomain:.*/CertDomain: ${domain}/g" /etc/XrayR/config.yml
+    
+    elif [ "$choose_node" == "4" ]; then
+    node_id="4"
+    domain="02.vn.aikocute.com"
+
+    wget https://raw.githubusercontent.com/AikoCute/aiko-pem/aiko/Pem/VN-02/02.vn.pem -O /root/cert/server.pem
+    wget https://raw.githubusercontent.com/AikoCute/aiko-pem/aiko/Pem/VN-02/02.vn-privkey.pem -O /root/cert/privkey.pem
+    wget https://raw.githubusercontent.com/AikoCute/Aiko-Config/aiko/Config-Trojan%2BVmess.yml -O /etc/XrayR/config.yml
+    sed -i "s/NodeID:.*/NodeID: ${node_id}/g" /etc/XrayR/config.yml
+    sed -i "s/CertDomain:.*/CertDomain: ${domain}/g" /etc/XrayR/config.yml
+    
+    elif [ "$choose_node" == "5" ]; then
+    node_id="5"
+    domain="01.jp.aikocute.com"
+
+    wget https://raw.githubusercontent.com/AikoCute/aiko-pem/aiko/Pem/JP-01/01.jp.pem -O /root/cert/server.pem
+    wget https://raw.githubusercontent.com/AikoCute/aiko-pem/aiko/Pem/JP-01/01.jp-privkey.pem -O /root/cert/privkey.pem
+    wget https://raw.githubusercontent.com/AikoCute/Aiko-Config/aiko/Config-Trojan%2BVmess.yml -O /etc/XrayR/config.yml
+    sed -i "s/NodeID:.*/NodeID: ${node_id}/g" /etc/XrayR/config.yml
+    sed -i "s/CertDomain:.*/CertDomain: ${domain}/g" /etc/XrayR/config.yml
+    
+    elif [ "$choose_node" == "6" ]; then
+    node_id="6"
+    domain="01.us.aikocute.com"
+
+    wget https://raw.githubusercontent.com/AikoCute/aiko-pem/aiko/Pem/US-01/01.us.pem -O /root/cert/server.pem
+    wget https://raw.githubusercontent.com/AikoCute/aiko-pem/aiko/Pem/US-01/01.us-privkey.pem -O /root/cert/privkey.pem
+    wget https://raw.githubusercontent.com/AikoCute/Aiko-Config/aiko/Config-Trojan%2BVmess.yml -O /etc/XrayR/config.yml
+    sed -i "s/NodeID:.*/NodeID: ${node_id}/g" /etc/XrayR/config.yml
+    sed -i "s/CertDomain:.*/CertDomain: ${domain}/g" /etc/XrayR/config.yml
+
+    elif [ "$choose_node" == "7" ]; then
+    node_id="7"
+    domain="03.vn.aikocute.com"
+    
+    wget https://raw.githubusercontent.com/AikoCute/aiko-pem/aiko/Pem/VN-03/03.vn.pem -O /root/cert/server.pem
+    wget https://raw.githubusercontent.com/AikoCute/aiko-pem/aiko/Pem/VN-03/03.vn-privkey.pem -O /root/cert/privkey.pem
+    wget https://raw.githubusercontent.com/AikoCute/Aiko-Config/aiko/Config-Trojan%2BVmess.yml -O /etc/XrayR/config.yml
+    sed -i "s/NodeID:.*/NodeID: ${node_id}/g" /etc/XrayR/config.yml
+    sed -i "s/CertDomain:.*/CertDomain: ${domain}/g" /etc/XrayR/config.yml
+    
+    elif [ "$choose_node" == "8" ]; then
+    node_id="8"
+    domain="02.sing.aikocute.com"
+
+    wget https://raw.githubusercontent.com/AikoCute/aiko-pem/aiko/Pem/SG-02/02.sing.pem -O /root/cert/server.pem
+    wget https://raw.githubusercontent.com/AikoCute/aiko-pem/aiko/Pem/SG-02/02.sing-privkey.pem -O /root/cert/privkey.pem
+    wget https://raw.githubusercontent.com/AikoCute/Aiko-Config/aiko/Config-Trojan%2BVmess.yml -O /etc/XrayR/config.yml
+    sed -i "s/NodeID:.*/NodeID: ${node_id}/g" /etc/XrayR/config.yml
+    sed -i "s/CertDomain:.*/CertDomain: ${domain}/g" /etc/XrayR/config.yml
+    
+    elif [ "$choose_node" == "9" ]; then
+    node_id="9"
+    domain="04.vn.aikocute.com"
+
+    wget https://raw.githubusercontent.com/AikoCute/aiko-pem/aiko/Pem/VN-04/04.vn.pem -O /root/cert/server.pem
+    wget https://raw.githubusercontent.com/AikoCute/aiko-pem/aiko/Pem/VN-04/04.vn-privkey.pem -O /root/cert/privkey.pem
+    wget https://raw.githubusercontent.com/AikoCute/Aiko-Config/aiko/Config-Trojan%2BVmess.yml -O /etc/XrayR/config.yml
+    sed -i "s/NodeID:.*/NodeID: ${node_id}/g" /etc/XrayR/config.yml
+    sed -i "s/CertDomain:.*/CertDomain: ${domain}/g" /etc/XrayR/config.yml
+    
     else
-        show_menu
+    
+    read -p "Vui lòng nhập node ID :" aiko_node_id
+    [ -z "${aiko_node_id}" ]
+    echo -e "${green}Node ID của bạn đặt là: ${aiko_node_id}${plain}"
+    echo -e "-------------------------"
+
+    wget https://raw.githubusercontent.com/AikoCute/Aiko-Config/aiko/Config-V2ray.yml -O /etc/XrayR/config.yml
+    sed -i "s/NodeID:.*/NodeID: ${aiko_node_id}/g" /etc/XrayR/config.yml
+    
     fi
 }
 
-before_show_menu() {
-    echo && echo -n -e "${yellow}Nhấn trở lại để trở về menu chính: ${plain}" && read temp
-    show_menu
-}
+config_nhkvpn_xrayr() {
+    echo -e "-------------------------"
+    echo -e "[1] Config Trojan [TLS]"
+    echo -e "[2] Config V2Ray"
+    echo -e "[3] Config V2Ray+Trojan [TLS]"
+    echo -e "Enter - Mặc định - V2ray-AikoCute"
+    echo -e "-------------------------"
+    read -p "Vui lòng chọn config cấu hình: " nhk_choose
+    if [ "$nhk_choose" == "1" ]; then 
+    
+    echo -e "${green}Đặt số nút Trên Web V2Board-Trojan${plain}"
+    echo ""
+    read -p "Vui lòng nhập node ID :" nhk_node_id
+    [ -z "${nhk_node_id}" ]
+    echo "---------------------------"
+    echo -e "${green}Node ID của bạn đặt là: ${nhk_node_id}${plain}"
+    echo "---------------------------"
+    echo ""
 
-install_XrayR_soga() {
-    bash -c <(curl -Ls https://github.com/AikoCute/XrayR-release/raw/data/install.sh) @ install
-    bash <(curl -Ls https://raw.githubusercontent.com/vaxilu/soga/master/install.sh)
-    if [[ $? == 0 ]]; then
-        if [[ $# == 0 ]]; then
-            start
-        else
-            start 0
-        fi
-    fi
-}
+    
+    echo "Tên Miền của nút Trojan 'testcode.aikocute.com'"
+    echo ""
+    read -p "Vui lòng Nhập domain :" nhk_domain
+    [ -z "${nhk_domain}" ]
+    echo "---------------------------"
+    echo -e "${green}Tên miền của bạn đặt là: ${nhk_domain}${plain}"
+    echo "---------------------------"
+    
+    wget https://raw.githubusercontent.com/AikoCute/Aiko-Config/nhk/Config-Trojan.yml -O /etc/XrayR/config.yml
+    sed -i "s/NodeID:.*/NodeID: ${nhk_node_id}/g" /etc/XrayR/config.yml
+    sed -i "s/CertDomain:.*/CertDomain: ${nhk_domain}/g" /etc/XrayR/config.yml
+    elif [ "$nhk_choose" == "2" ]; then
 
-update() {
-    if [[ $# == 0 ]]; then
-        echo && echo -n -e "Nhập phiên bản được chỉ định (phiên bản mới nhất mặc định): " && read version
+    
+    echo "---------------------------"
+    echo -e "${green}Đặt số nút Trên Web V2Board-V2ray${plain}"
+    echo ""
+    read -p "Vui lòng nhập node ID :" nhk_node_id
+    [ -z "${nhk_node_id}" ]
+    echo "---------------------------"
+    echo -e "${green}Node ID của bạn đặt là: ${nhk_node_id}${plain}"
+    echo "---------------------------"
+    echo ""
+
+    wget https://raw.githubusercontent.com/AikoCute/Aiko-Config/nhk/Config-V2ray.yml -O /etc/XrayR/config.yml
+    sed -i "s/NodeID:.*/NodeID: ${nhk_node_id}/g" /etc/XrayR/config.yml
+    elif [ "$nhk_choose" == "3" ]; then
+    echo "---------------------------"
+    echo -e "${green}Đặt số nút Trên Web V2Board-Trojan+V2ray${plain}"
+    echo ""
+    read -p "Vui lòng nhập node ID :" nhk_node_id
+    [ -z "${nhk_node_id}" ]
+    echo "---------------------------"
+    echo -e "${green}Node ID của bạn đặt là: ${nhk_node_id}${plain}"
+    echo "---------------------------"
+    echo ""
+
+    
+    echo "Tên Miền của nút Trojan 'testcode.aikocute.com'"
+    echo ""
+    read -p "Vui lòng Nhập domain :" nhk_domain
+    [ -z "${nhk_domain}" ]
+    echo "---------------------------"
+    echo -e "${green}Tên miền của bạn đặt là: ${nhk_domain}${plain}"
+    echo "---------------------------"
+
+
+    
+    wget https://raw.githubusercontent.com/AikoCute/Aiko-Config/nhk/Config-Trojan%2BVmess.yml -O /etc/XrayR/config.yml
+    sed -i "s/NodeID:.*/NodeID: ${nhk_node_id}/g" /etc/XrayR/config.yml
+    sed -i "s/CertDomain:.*/CertDomain: ${nhk_domain}/g" /etc/XrayR/config.yml
     else
-        version=$2
-    fi
-#    confirm "Tính năng này sẽ buộc phải cài đặt lại phiên bản mới nhất hiện tại, dữ liệu sẽ không bị mất, bạn có tiếp tục không?" "n"
-#    if [[ $? != 0 ]]; then
-#        echo -e "${red}Đã hủy bỏ${plain}"
-#        if [[ $1 != 0 ]]; then
-#            before_show_menu
-#        fi
-#        return 0
-#    fi
-    bash <(curl -Ls https://raw.githubusercontent.com/AikoCute/Aiko-release/master/install.sh) $version
-    if [[ $? == 0 ]]; then
-        echo -e "${green}Bản cập nhật hoàn tất và aiko đã được tự động khởi động lại, sử dụng aiko log để xem nhật ký chạy${plain}"
-        exit
-    fi
+    echo "---------------------------"
+    echo -e "${green}Đặt số nút Trên Web V2Board-Trojan+V2ray${plain}"
+    echo ""
+    read -p "Vui lòng nhập node ID :" nhk_node_id
+    [ -z "${nhk_node_id}" ]
+    echo "---------------------------"
+    echo -e "${green}Node ID của bạn đặt là: ${nhk_node_id}${plain}"
+    echo "---------------------------"
+    echo ""
 
-    if [[ $# == 0 ]]; then
-        before_show_menub
+    
+    echo "Tên Miền của nút Trojan 'testcode.aikocute.com'"
+    echo ""
+    read -p "Vui lòng Nhập domain :" nhk_domain
+    [ -z "${nhk_domain}" ]
+    echo "---------------------------"
+    echo -e "${green}Tên miền của bạn đặt là: ${nhk_domain}${plain}"
+    echo "---------------------------"
+
+
+    
+    wget https://raw.githubusercontent.com/AikoCute/Aiko-Config/nhk/Config-Trojan%2BVmess.yml -O /etc/XrayR/config.yml
+    sed -i "s/NodeID:.*/NodeID: ${nhk_node_id}/g" /etc/XrayR/config.yml
+    sed -i "s/CertDomain:.*/CertDomain: ${nhk_domain}/g" /etc/XrayR/config.yml
     fi
+    nano /etc/XrayR/config.yml
+ 
+}
+
+config_aqvpn_xrayr() {
+    echo "Đặt số nút Trên Web V2Board"
+    echo ""
+    read -p "Vui lòng nhập node ID :" aq_node_id
+    [ -z "${aq_node_id}" ]
+    echo "---------------------------"
+    echo "Node ID của bạn đặt là: ${node_id}"
+    echo "---------------------------"
+    echo ""
+    echo "Tên Miền của nút : 'testcode.aikocute.com'"
+    echo ""
+    read -p "Vui lòng Nhập domain :" aq_domain
+    [ -z "${aq_domain}" ]
+    echo "---------------------------"
+    echo -e "${green}Tên miền của bạn đặt là: ${aq_domain}${plain}"
+    echo "---------------------------"
+    echo ""
+
+    # Writing config.yml
+    echo "Đang cố gắng ghi tệp cấu hình ..."
+    wget https://raw.githubusercontent.com/AQSaikato/key_pem/main/fullchain.pem -O /root/cert/server.pem
+    wget https://raw.githubusercontent.com/AQSaikato/key_pem/main/privkey.pem -O /root/cert/privkey.pem
+    wget https://raw.githubusercontent.com/AQSaikato/xrayr/main/config.yml -O /etc/XrayR/config.yml
+    sed -i "s/NodeID:.*/NodeID: ${aq_node_id}/g" /etc/XrayR/config.yml
+    sed -i "s/CertDomain:.*/CertDomain: ${aq_domain}/g" /etc/XrayR/config.yml
+    echo ""
+
+    nano /etc/XrayR/config.yml
 }
 
 config() {
-    echo "aiko tự động cố gắng khởi động lại sau khi sửa đổi cấu hình"
-    nano /etc/aiko/config.yml
-    sleep 2
-    check_status
-    case $? in
-        0)
-            echo -e "Trạng thái aiko: ${green}Đang chạy${plain}"
-            ;;
-        1)
-            echo -e "Phát hiện bạn không khởi động aiko hoặc aiko tự động khởi động lại thất bại, xem nhật ký？[Y/n]" && echo
-            read -e -p "(Mặc định: y):" yn
-            [[ -z ${yn} ]] && yn="y"
-            if [[ ${yn} == [Yy] ]]; then
-               show_log
-            fi
-            ;;
-        2)
-            echo -e "Trạng thái aiko: ${red}Không được cài đặt${plain}"
-    esac
-}
+    echo -e "-------------------------"
+    echo -e "[1] Aiko : aikocute.com"
+    echo -e "[2] nhkvpn : nhkvpn.net"
+    echo -e "[3] aqvpn : aqvpn.me - Gạch Tên :D"
+    echo -e "-------------------------"
+    read -p "Vui lòng chọn Web lên sever: " choose_config
+    echo -e "${green}Bạn đã chọn Web : ${choose}${plain}"
 
-uninstall() {
-    confirm "Bạn có chắc bạn muốn gỡ cài đặt aiko không?" "n"
-    if [[ $? != 0 ]]; then
-        if [[ $# == 0 ]]; then
-            show_menu
-        fi
-        return 0
-    fi
-    systemctl stop aiko
-    systemctl disable aiko
-    rm /etc/systemd/system/aiko.service -f
-    systemctl daemon-reload
-    systemctl reset-failed
-    rm /etc/aiko/ -rf
-    rm /usr/local/aiko/ -rf
-
-    echo ""
-    echo -e "Gỡ cài đặt thành công và nếu bạn muốn xóa tập lệnh này, hãy chạy sau khi thoát khỏi tập lệnh ${green}rm /usr/bin/aiko -f${plain} Để xóa"
-    echo ""
-
-    if [[ $# == 0 ]]; then
-        before_show_menu
-    fi
-}
-
-start() {
-    check_status
-    if [[ $? == 0 ]]; then
-        echo ""
-        echo -e "${green}aiko đang chạy và không cần khởi động lại, vui lòng chọn Khởi động lại nếu bạn muốn khởi động lại${plain}"
+    if [ "$choose_config" == "1" ]; then 
+        config_aikovpn_xrayr
+    elif [ "$choose_config" == "2" ]; then 
+        config_nhkvpn_xrayr
+    elif [ "$choose_config" == "3" ]; then 
+        config_aqvpn_xrayr
     else
-        systemctl start aiko
-        sleep 2
-        check_status
-        if [[ $? == 0 ]]; then
-            echo -e "${green}aiko khởi động thành công, sử dụng aiko log để xem nhật ký chạy${plain}"
-        else
-            echo -e "${red}aiko có thể khởi động không thành công, vui lòng xem thông tin nhật ký sau bằng cách sử dụng aiko log${plain}"
-        fi
-    fi
-
-    if [[ $# == 0 ]]; then
-        before_show_menu
+        echo -e "${red}Bạn đã chọn sai, vui lòng chọn lại [1-3]${plain}"
+        config
     fi
 }
 
-stop() {
-    systemctl stop aiko
-    sleep 2
-    check_status
-    if [[ $? == 1 ]]; then
-        echo -e "${green}aiko dừng lại thành công${plain}"
-    else
-        echo -e "${red}aiko dừng thất bại, có thể là do thời gian dừng vượt quá hai giây, vui lòng kiểm tra thông tin nhật ký sau${plain}"
-    fi
-
-    if [[ $# == 0 ]]; then
-        before_show_menu
-    fi
-}
-
-restart() {
-    systemctl restart aiko
-    sleep 2
-    check_status
-    if [[ $? == 0 ]]; then
-        echo -e "${green}Khởi động lại aiko thành công, sử dụng aiko log để xem nhật ký chạy${plain}"
-    else
-        echo -e "${red}aiko có thể khởi động không thành công, vui lòng xem thông tin nhật ký sau bằng cách sử dụng aiko log${plain}"
-    fi
-    if [[ $# == 0 ]]; then
-        before_show_menu
-    fi
-}
-
-status() {
-    systemctl status aiko --no-pager -l
-    if [[ $# == 0 ]]; then
-        before_show_menu
-    fi
-}
-
-enable() {
-    systemctl enable aiko
-    if [[ $? == 0 ]]; then
-        echo -e "${green}Thiết lập aiko bật nguồn thành công${plain}"
-    else
-        echo -e "${red}Thiết lập aiko tự khởi động thất bại${plain}"
-    fi
-
-    if [[ $# == 0 ]]; then
-        before_show_menu
-    fi
-}
-
-disable() {
-    systemctl disable aiko
-    if [[ $? == 0 ]]; then
-        echo -e "${green}aiko hủy bỏ khởi động thành công${plain}"
-    else
-        echo -e "${red}aiko hủy bỏ khởi động tự khởi động thất bại${plain}"
-    fi
-
-    if [[ $# == 0 ]]; then
-        before_show_menu
-    fi
-}
-
-show_log() {
-    journalctl -u aiko.service -e --no-pager -f
-    if [[ $# == 0 ]]; then
-        before_show_menu
-    fi
+xrayr_old_config(){
+    bash <(curl -ls https://raw.githubusercontent.com/Aiko-Cute/Aiko-Cute/aiko/aiko.sh)
 }
 
 install_bbr() {
     bash <(curl -L -s https://raw.githubusercontent.com/aikoCute/BBR/aiko/tcp.sh)
-    #if [[ $? == 0 ]]; then
-    #    echo ""
-    #    echo -e "${green}Cài đặt bbr thành công, khởi động lại máy chủ${plain}"
-    #else
-    #    echo ""
-    #    echo -e "${red}Tải xuống tập lệnh cài đặt bbr không thành công, vui lòng kiểm tra xem máy có thể kết nối Github hay không${plain}"
-    #fi
-
-    #before_show_menu
-}
-
-update_shell() {
-    wget -O /usr/bin/aiko -N --no-check-certificate https://raw.githubusercontent.com/AikoCute/Aiko-release/data/aiko.sh
-    if [[ $? != 0 ]]; then
-        echo ""
-        echo -e "${red}Tập lệnh tải xuống không thành công, vui lòng kiểm tra xem máy có thể kết nối Github hay không${plain}"
-        before_show_menu
-    else
-        chmod +x /usr/bin/aiko
-        echo -e "${green}Nâng cấp kịch bản thành công, chạy lại tập lệnh${plain}" && exit 0
-    fi
-}
-
-# 0: running, 1: not running, 2: not installed
-check_status() {
-    if [[ ! -f /etc/systemd/system/aiko.service ]]; then
-        return 2
-    fi
-    temp=$(systemctl status aiko | grep Active | awk '{print $3}' | cut -d "(" -f2 | cut -d ")" -f1)
-    if [[ x"${temp}" == x"running" ]]; then
-        return 0
-    else
-        return 1
-    fi
-}
-
-check_enabled() {
-    temp=$(systemctl is-enabled aiko)
-    if [[ x"${temp}" == x"enabled" ]]; then
-        return 0
-    else
-        return 1;
-    fi
-}
-
-check_uninstall() {
-    check_status
-    if [[ $? != 2 ]]; then
-        echo ""
-        echo -e "${red}aiko đã được cài đặt và không lặp lại cài đặt${plain}"
-        if [[ $# == 0 ]]; then
-            before_show_menu
-        fi
-        return 1
-    else
-        return 0
-    fi
-}
-
-check_install() {
-    check_status
-    if [[ $? == 2 ]]; then
-        echo ""
-        echo -e "${red}Vui lòng cài đặt aiko trước${plain}"
-        if [[ $# == 0 ]]; then
-            before_show_menu
-        fi
-        return 1
-    else
-        return 0
-    fi
-}
-
-show_status() {
-    check_status
-    case $? in
-        0)
-            echo -e "Trạng thái aiko: ${green}Đang chạy${plain}"
-            show_enable_status
-            ;;
-        1)
-            echo -e "Trạng thái aiko: ${yellow}Không chạy${plain}"
-            show_enable_status
-            ;;
-        2)
-            echo -e "Trạng thái aiko: ${red}Không được cài đặt${plain}"
-    esac
 }
 
 speedtest() {
@@ -353,128 +320,41 @@ speedtest() {
 }
 
 
-
-show_enable_status() {
-    check_enabled
-    if [[ $? == 0 ]]; then
-        echo -e "Có bật nguồn hay không: ${green}Có${plain}"
-    else
-        echo -e "Có bật nguồn hay không: ${red}Không${plain}"
-    fi
-}
-
-show_aiko_version() {
-    echo -n "Phiên bản aiko："
-    /usr/local/aiko/aiko -version
-    echo ""
-    if [[ $# == 0 ]]; then
-        before_show_menu
-    fi
-}
-
-show_usage() {
-     echo -n "AikoCute Hotme"
-}
-
 show_menu() {
     echo -e "
-  ${green}aiko Kịch bản quản lý back-end，${plain}${red}Không dùng cho docker${plain}
---- https://github.com/aiko-project/aiko ---
-  ${green}0.${plain} Sửa đổi cấu hình
+  ${green}Menu support Backend của Aiko${plain}
+        --- https://github.com/AikoCute ---
+  ${green}0.${plain} Thoát menu
 ————————————————
-  ${green}1.${plain} Cài đặt install_XrayR_soga
-  ${green}2.${plain} Cập nhật aiko
-  ${green}3.${plain} Gỡ cài đặt aiko
+  ${green}1.${plain} Cài đặt Backend
+  ${green}2.${plain} Cập nhật config
+  ${green}3.${plain} XrayR 1 Lần chạy (Aiko-NHK-AQVPN)
 ————————————————
-  ${green}4.${plain} Khởi động aiko
-  ${green}5.${plain} Dừng aiko
-  ${green}6.${plain} Khởi động lại aiko
-  ${green}7.${plain} Xem trạng thái aiko
-  ${green}8.${plain} Xem nhật ký aiko
-————————————————
-  ${green}9.${plain} Thiết lập aiko để bật nguồn tự khởi động
-  ${green}10.${plain} Hủy bỏ aiko khởi động tự khởi động
-————————————————
-  ${green}11.${plain} Cài đặt một cú nhấp chuột bbr (mới nhất)
-  ${green}12.${plain} Xem phiên bản aiko 
-  ${green}13.${plain} Nâng cấp kịch bản bảo trì
-  ${green}14.${plain} Speedtest VPS
+  ${green}4.${plain} Cài đặt BBR
+  ${green}5.${plain} Speedtest VPS
  "
  #Các bản cập nhật tiếp theo có thể được thêm vào chuỗi trên
     show_status
-    echo && read -p "Vui lòng nhập lựa chọn [0-13]: " num
+    echo && read -p "Vui lòng nhập lựa chọn [0-4]: " num
 
     case "${num}" in
-        0) config
+        0) exit 0
         ;;
-        1) check_uninstall && install_XrayR_soga
+        1) install
         ;;
-        2) check_install && update
+        2) config
         ;;
-        3) check_install && uninstall
+        3) xrayr_old_config
         ;;
-        4) check_install && start
+        4) install_bbr
         ;;
-        5) check_install && stop
+        5) speedtest
         ;;
-        6) check_install && restart
-        ;;
-        7) check_install && status
-        ;;
-        8) check_install && show_log
-        ;;
-        9) check_install && enable
-        ;;
-        10) check_install && disable
-        ;;
-        11) install_bbr
-        ;;
-        12) check_install && show_aiko_version
-        ;;
-        13) update_shell
-        ;;
-        14) speedtest
-        ;;
-        *) echo -e "${red}Vui lòng nhập số chính xác [0-12]${plain}"
+        *) echo -e "${red}Vui lòng nhập số chính xác [0-4]${plain}"
         ;;
     esac
 }
 
-
-if [[ $# > 0 ]]; then
-    case $1 in
-        "start") check_install 0 && start 0
-        ;;
-        "stop") check_install 0 && stop 0
-        ;;
-        "restart") check_install 0 && restart 0
-        ;;
-        "status") check_install 0 && status 0
-        ;;
-        "enable") check_install 0 && enable 0
-        ;;
-        "disable") check_install 0 && disable 0
-        ;;
-        "log") check_install 0 && show_log 0
-        ;;
-        "update") check_install 0 && update 0 $2
-        ;;
-        "config") config $*
-        ;;
-        "install") check_uninstall 0 && install 0
-        ;;
-        "uninstall") check_install 0 && uninstall 0
-        ;;
-        "version") check_install 0 && show_aiko_version 0
-        ;;
-        "update_shell") update_shell
-        ;;
-        "speedtest") speedtest
-        ;;
-        "bbr") install_bbr
-        ;;
-        *) show_usage
-    esac
 else
     show_menu
 fi

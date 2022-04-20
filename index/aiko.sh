@@ -204,9 +204,12 @@ config_aikovpn_xrayr() {
       wget https://raw.githubusercontent.com/AikoCute/Aiko-Config/aiko/Config-Trojan%2BVmess.yml -O /etc/XrayR/config.yml
       sed -i "s/NodeID:.*/NodeID: ${node_id}/g" /etc/XrayR/config.yml
       sed -i "s/CertDomain:.*/CertDomain: ${domain}/g" /etc/XrayR/config.yml
-    
+      
+      else
+      config_aikovpn_xrayr
+      fi
+
     else
-    
       read -p "Vui lòng nhập node ID :" aiko_node_id
       [ -z "${aiko_node_id}" ]
       echo -e "${green}Node ID của bạn đặt là: ${aiko_node_id}${plain}"
@@ -218,7 +221,7 @@ config_aikovpn_xrayr() {
     fi
       XrayR start
       show_menu
-      ;;}
+}     
 
 config_nhkvpn_xrayr() {
     echo -e "-------------------------"

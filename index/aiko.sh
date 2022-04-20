@@ -622,8 +622,6 @@ config() {
             config_soga_aiko
         elif [ "$choose_config_aiko" == "3" ]; then
             config_soga_aiko && config_xrayr_aiko
-        fi
-
         else
             echo -e "${red}Bạn đã chọn sai cấu hình${plain}"
             config

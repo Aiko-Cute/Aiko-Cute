@@ -755,12 +755,12 @@ show_menu() {
   ${green}3.${plain} Trạng thái Backend
   ${green}4.${plain} XrayR 1 Lần chạy (Aiko-NHK-AQVPN)
 ————————————————
-  ${green}6.${plain} Mở port VPS
-  ${green}7.${plain} Cài đặt BBR
-  ${green}8.${plain} Speedtest VPS
+  ${green}5.${plain} Mở port VPS
+  ${green}6.${plain} Cài đặt BBR
+  ${green}7.${plain} Speedtest VPS
  "
  #Các bản cập nhật tiếp theo có thể được thêm vào chuỗi trên
-    echo && read -p "Vui lòng nhập lựa chọn [0-4]: " num
+    echo && read -p "Vui lòng nhập lựa chọn [0-7]: " num
 
     case "${num}" in
         0) exit 0
@@ -773,9 +773,11 @@ show_menu() {
         ;;
         4) xrayr_old_config
         ;;
-        5) install_bbr
+        5) unlock_port
         ;;
-        6) speedtest
+        6) install_bbr
+        ;;
+        7) speedtest
         ;;
         *) echo -e "${red}Vui lòng nhập số chính xác [0-6]${plain}"
         ;;

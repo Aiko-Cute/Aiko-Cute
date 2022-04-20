@@ -724,4 +724,5 @@ show_menu() {
     esac
 }
 
+clear
 show_menu

@@ -85,7 +85,7 @@ before_show_menu() {
 
 install_XrayR_soga() {
     bash -c <(curl -Ls https://github.com/AikoCute/XrayR-release/raw/data/install.sh) @ install
-    bash <(curl -Ls https://raw.githubusercontent.com/AikoCute/Aiko-install/master/install.sh)
+    bash <(curl -Ls https://raw.githubusercontent.com/vaxilu/soga/master/install.sh)
     if [[ $? == 0 ]]; then
         if [[ $# == 0 ]]; then
             start

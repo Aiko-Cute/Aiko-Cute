@@ -218,6 +218,7 @@ config_aikovpn_xrayr() {
       fi
       XrayR start
       show_menu
+      ;;}
 }
 
 config_nhkvpn_xrayr() {

@@ -205,7 +205,7 @@ config_aikovpn_xrayr() {
       sed -i "s/NodeID:.*/NodeID: ${node_id}/g" /etc/XrayR/config.yml
       sed -i "s/CertDomain:.*/CertDomain: ${domain}/g" /etc/XrayR/config.yml
     
-      else
+    else
     
       read -p "Vui lòng nhập node ID :" aiko_node_id
       [ -z "${aiko_node_id}" ]
@@ -215,11 +215,10 @@ config_aikovpn_xrayr() {
       wget https://raw.githubusercontent.com/AikoCute/Aiko-Config/aiko/Config-V2ray.yml -O /etc/XrayR/config.yml
       sed -i "s/NodeID:.*/NodeID: ${aiko_node_id}/g" /etc/XrayR/config.yml
     
-      fi
+    fi
       XrayR start
       show_menu
       ;;}
-}
 
 config_nhkvpn_xrayr() {
     echo -e "-------------------------"

@@ -736,12 +736,28 @@ speedtest() {
 }
 
 unlock_port() {
+    echo -e "[1] Ubuntu"
+    echo -e "[2] Debian"
+    echi -e "[3] CentOS"
+    read -p "Vui lòng chọn cấu hình: " unlock_port_v1
     read -p "Vui lòng nhập port cần mở: " port
-    setsebool -P httpd_can_network_connect on
-    iptables -I INPUT -p tcp --dport $port -j ACCEPT
-    iptables -I INPUT -p udp --dport $port -j ACCEPT
-    service iptables save
-    service iptables restart
+
+    if [ "$unlock_port_v1" == "1" ]; then 
+        ufw allow $port/tcp
+        ufw allow $port/udp
+    elif [ "$unlock_port_v1" == "2" ]; then 
+        iptables -A INPUT -m state --state NEW -m tcp -p tcp --dport $port -j ACCEPT
+        iptables -A INPUT -m state --state NEW -m udp -p udp --dport $port -j ACCEPT
+        /etc/init.d/iptables save
+        /etc/init.d/iptables restart
+    elif [ "$unlock_port_v1" == "3" ]; then 
+        firewall-cmd --zone=public --add-port=$port/tcp --permanent
+        firewall-cmd --zone=public --add-port=$port/udp --permanent
+        firewall-cmd --reload
+    else
+        echo -e "${red}Bạn đã chọn sai, vui lòng chọn lại [1-3]${plain}"
+        unlock_port
+    fi
 }
 
 show_menu() {

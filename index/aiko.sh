@@ -620,7 +620,7 @@ config() {
         elif [ "$choose_config_aiko" == "3" ]; then
             config_soga_aiko && config_xrayr_aiko
         fi
-        
+
         else
             echo -e "${red}Bạn đã chọn sai cấu hình${plain}"
             config
@@ -673,7 +673,7 @@ speedtest() {
 show_menu() {
     echo -e "
   ${green}Menu support Backend của Aiko${plain}
-        --- https://github.com/AikoCute ---
+  --- https://github.com/AikoCute ---
   ${green}0.${plain} Thoát menu
 ————————————————
   ${green}1.${plain} Cài đặt Backend

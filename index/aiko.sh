@@ -35,126 +35,189 @@ install() {
 }
 
 config_aikovpn_xrayr() {
-    echo -e "-------------------------"
-    echo -e "[1] Node :01 - 01.hk.aikocute.com - HK"
-    echo -e "[2] Node :02 - 01.sing.aikocute.com - SG"
-    echo -e "[3] Node :03 - 01.vn.aikocute.com - VN1"
-    echo -e "[4] Node :04 - 02.vn.aikocute.com - VN2"
-    echo -e "[5] Node :05 - 01.jp.aikocute.com - JP"
-    echo -e "[6] Node :06 - 01.us.aikocute.com - US"
-    echo -e "[7] Node :07 - 03.vn.aikocute.com - VN3"
-    echo -e "[8] Node :08 - 02.sing.aikocute.com - SG"
-    echo -e "[9] Node :09 - 04.vn.aikocute.com - VN4"
-    echo -e " Nhấn enter để chuyển sang chế độ nhập - Vmess"
-    echo -e "-------------------------"
-    read -p "Vui lòng chọn config cấu hình: " choose_node
+    echo -e "[1] Config Trojan"
+    echo -e "[2] Config V2ray"
+    echo -e "[3] Config V2ray + Trojan"
+    read -p "Vui lòng chọn config cấu hình: " config_aikovpn_xrayr_v1
+
+    if [ "$config_aikovpn_xrayr_v1" == "1" ]; then 
+      read -p "Nhập ID nút Trojan"  id_trojan_aiko
+      read -p "nhập domain Trojan"  domain_trojan_aiko
+      echo -e "-------------------------"
+      echo -e "[1] Node :01 - 01.hk.aikocute.com - HK"
+      echo -e "[2] Node :02 - 01.sing.aikocute.com - SG"
+      echo -e "[3] Node :03 - 01.vn.aikocute.com - VN1"
+      echo -e "[4] Node :04 - 02.vn.aikocute.com - VN2"
+      echo -e "[5] Node :05 - 01.jp.aikocute.com - JP"
+      echo -e "[6] Node :06 - 01.us.aikocute.com - US"
+      echo -e "[7] Node :07 - 03.vn.aikocute.com - VN3"
+      echo -e "[8] Node :08 - 02.sing.aikocute.com - SG"
+      echo -e "[9] Node :09 - 04.vn.aikocute.com - VN4"
+      echo -e " Nhấn enter để chuyển sang chế độ nhập - Aiko"
+      echo -e "-------------------------"
+      read -p "Vui lòng chọn config cấu hình: " choose_trojan_aiko
+
+      if [ "$choose_trojan_aiko" == "1" ]; then
+      domain_trojan_aiko="01.hk.aikocute.com"
+      elif [ "$choose_trojan_aiko" == "2" ]; then
+      domain_trojan_aiko="01.sing.aikocute.com"
+      elif [ "$choose_trojan_aiko" == "3" ]; then
+      domain_trojan_aiko="01.vn.aikocute.com"
+      elif [ "$choose_trojan_aiko" == "4" ]; then
+      domain_trojan_aiko="02.vn.aikocute.com"
+      elif [ "$choose_trojan_aiko" == "5" ]; then
+      domain_trojan_aiko="01.jp.aikocute.com"
+      elif [ "$choose_trojan_aiko" == "6" ]; then
+      domain_trojan_aiko="01.us.aikocute.com"
+      elif [ "$choose_trojan_aiko" == "7" ]; then
+      domain_trojan_aiko="03.vn.aikocute.com"
+      elif [ "$choose_trojan_aiko" == "8" ]; then
+      domain_trojan_aiko="02.sing.aikocute.com"
+      elif [ "$choose_trojan_aiko" == "9" ]; then
+      domain_trojan_aiko="04.vn.aikocute.com"
+      else
+      echo -e "Không tìm thấy kết quả vui lòng nhập lại"
+      config_aikovpn_xrayr
+      fi
+          
+      wget https://raw.githubusercontent.com/AikoCute/aiko-pem/aiko/Pem/Aiko-PemKey/key.pem -O /etc/XrayR/server.pem
+      wget https://raw.githubusercontent.com/AikoCute/aiko-pem/aiko/Pem/Aiko-PemKey/privkey.pem -O /etc/XrayR/privkey.pem
+      wget https://raw.githubusercontent.com/AikoCute/Aiko-Config/aiko/Config-Trojan.yml -O /etc/XrayR/config.yml
+      sed -i "s/NodeID:.*/NodeID: ${id_trojan_aiko}/g" /etc/XrayR/config.yml
+      sed -i "s/CertDomain:.*/CertDomain: ${domain_trojan_aiko}/g" /etc/XrayR/config.yml
+      show_menu
+
+    elif [ "$config_aikovpn_xrayr_v1" == "2" ]; then
+      read -p "Vui lòng nhập node ID :" aiko_node_id
+      [ -z "${aiko_node_id}" ]
+      echo -e "${green}Node ID của bạn đặt là: ${aiko_node_id}${plain}"
+      echo -e "-------------------------"
+
+      wget https://raw.githubusercontent.com/AikoCute/Aiko-Config/aiko/Config-V2ray.yml -O /etc/XrayR/config.yml
+      sed -i "s/NodeID:.*/NodeID: ${aiko_node_id}/g" /etc/XrayR/config.yml
+      show_menu
+
+    elif [ "$config_aikovpn_xrayr_v1" == "3" ]; then
+      echo -e "-------------------------"
+      echo -e "[1] Node :01 - 01.hk.aikocute.com - HK"
+      echo -e "[2] Node :02 - 01.sing.aikocute.com - SG"
+      echo -e "[3] Node :03 - 01.vn.aikocute.com - VN1"
+      echo -e "[4] Node :04 - 02.vn.aikocute.com - VN2"
+      echo -e "[5] Node :05 - 01.jp.aikocute.com - JP"
+      echo -e "[6] Node :06 - 01.us.aikocute.com - US"
+      echo -e "[7] Node :07 - 03.vn.aikocute.com - VN3"
+      echo -e "[8] Node :08 - 02.sing.aikocute.com - SG"
+      echo -e "[9] Node :09 - 04.vn.aikocute.com - VN4"
+      echo -e " Nhấn enter để chuyển sang chế độ nhập - Vmess"
+      echo -e "-------------------------"
+      read -p "Vui lòng chọn config cấu hình: " choose_node
 
 
-    if [ "$choose_node" == "1" ]; then 
-    # Đặt số nút
-    node_id="1"
-    domain="01.hk.aikocute.com"
+      if [ "$choose_node" == "1" ]; then 
+      # Đặt số nút
+      node_id="1"
+      domain="01.hk.aikocute.com"
 
-    #Ghi file
-    wget https://raw.githubusercontent.com/AikoCute/aiko-pem/aiko/Pem/HK-01/01.hk.pem -O /root/cert/server.pem
-    wget https://raw.githubusercontent.com/AikoCute/aiko-pem/aiko/Pem/HK-01/01.hk-privkey.pem -O /root/cert/privkey.pem
-    wget https://raw.githubusercontent.com/AikoCute/Aiko-Config/aiko/Config-Trojan%2BVmess.yml -O /etc/XrayR/config.yml
-    sed -i "s/NodeID:.*/NodeID: ${node_id}/g" /etc/XrayR/config.yml
-    sed -i "s/CertDomain:.*/CertDomain: ${domain}/g" /etc/XrayR/config.yml
+      #Ghi file
+      wget https://raw.githubusercontent.com/AikoCute/aiko-pem/aiko/Pem/HK-01/01.hk.pem -O /etc/XrayR/server.pem
+      wget https://raw.githubusercontent.com/AikoCute/aiko-pem/aiko/Pem/HK-01/01.hk-privkey.pem -O /etc/XrayR/privkey.pem
+      wget https://raw.githubusercontent.com/AikoCute/Aiko-Config/aiko/Config-Trojan%2BVmess.yml -O /etc/XrayR/config.yml
+      sed -i "s/NodeID:.*/NodeID: ${node_id}/g" /etc/XrayR/config.yml
+      sed -i "s/CertDomain:.*/CertDomain: ${domain}/g" /etc/XrayR/config.yml
     
-    elif [ "$choose_node" == "2" ]; then 
-    node_id="2"
-    domain="01.sing.aikocute.com"
+      elif [ "$choose_node" == "2" ]; then 
+      node_id="2"
+      domain="01.sing.aikocute.com"
 
-    wget https://raw.githubusercontent.com/AikoCute/aiko-pem/aiko/Pem/SG-01/01.sing.pem -O /root/cert/server.pem
-    wget https://raw.githubusercontent.com/AikoCute/aiko-pem/aiko/Pem/SG-01/01.sing-privkey.pem -O /root/cert/privkey.pem
-    wget https://raw.githubusercontent.com/AikoCute/Aiko-Config/aiko/Config-Trojan%2BVmess.yml -O /etc/XrayR/config.yml
-    sed -i "s/NodeID:.*/NodeID: ${node_id}/g" /etc/XrayR/config.yml
-    sed -i "s/CertDomain:.*/CertDomain: ${domain}/g" /etc/XrayR/config.yml
+      wget https://raw.githubusercontent.com/AikoCute/aiko-pem/aiko/Pem/SG-01/01.sing.pem -O /etc/XrayR/server.pem
+      wget https://raw.githubusercontent.com/AikoCute/aiko-pem/aiko/Pem/SG-01/01.sing-privkey.pem -O /etc/XrayR/privkey.pem
+      wget https://raw.githubusercontent.com/AikoCute/Aiko-Config/aiko/Config-Trojan%2BVmess.yml -O /etc/XrayR/config.yml
+      sed -i "s/NodeID:.*/NodeID: ${node_id}/g" /etc/XrayR/config.yml
+      sed -i "s/CertDomain:.*/CertDomain: ${domain}/g" /etc/XrayR/config.yml
     
-    elif [ "$choose_node" == "3" ]; then
-    node_id="3"
-    domain="01.vn.aikocute.com"
+      elif [ "$choose_node" == "3" ]; then
+      node_id="3"
+      domain="01.vn.aikocute.com"
 
-    wget https://raw.githubusercontent.com/AikoCute/aiko-pem/aiko/Pem/VN-01/01.vn.pem -O /root/cert/server.pem
-    wget https://raw.githubusercontent.com/AikoCute/aiko-pem/aiko/Pem/VN-01/01.vn-privkey.pem -O /root/cert/privkey.pem
-    wget https://raw.githubusercontent.com/AikoCute/Aiko-Config/aiko/Config-Trojan%2BVmess.yml -O /etc/XrayR/config.yml
-    sed -i "s/NodeID:.*/NodeID: ${node_id}/g" /etc/XrayR/config.yml
-    sed -i "s/CertDomain:.*/CertDomain: ${domain}/g" /etc/XrayR/config.yml
+      wget https://raw.githubusercontent.com/AikoCute/aiko-pem/aiko/Pem/VN-01/01.vn.pem -O /etc/XrayR/server.pem
+      wget https://raw.githubusercontent.com/AikoCute/aiko-pem/aiko/Pem/VN-01/01.vn-privkey.pem -O /etc/XrayR/privkey.pem
+      wget https://raw.githubusercontent.com/AikoCute/Aiko-Config/aiko/Config-Trojan%2BVmess.yml -O /etc/XrayR/config.yml
+      sed -i "s/NodeID:.*/NodeID: ${node_id}/g" /etc/XrayR/config.yml
+      sed -i "s/CertDomain:.*/CertDomain: ${domain}/g" /etc/XrayR/config.yml
     
-    elif [ "$choose_node" == "4" ]; then
-    node_id="4"
-    domain="02.vn.aikocute.com"
+      elif [ "$choose_node" == "4" ]; then
+      node_id="4"
+      domain="02.vn.aikocute.com"
 
-    wget https://raw.githubusercontent.com/AikoCute/aiko-pem/aiko/Pem/VN-02/02.vn.pem -O /root/cert/server.pem
-    wget https://raw.githubusercontent.com/AikoCute/aiko-pem/aiko/Pem/VN-02/02.vn-privkey.pem -O /root/cert/privkey.pem
-    wget https://raw.githubusercontent.com/AikoCute/Aiko-Config/aiko/Config-Trojan%2BVmess.yml -O /etc/XrayR/config.yml
-    sed -i "s/NodeID:.*/NodeID: ${node_id}/g" /etc/XrayR/config.yml
-    sed -i "s/CertDomain:.*/CertDomain: ${domain}/g" /etc/XrayR/config.yml
+      wget https://raw.githubusercontent.com/AikoCute/aiko-pem/aiko/Pem/VN-02/02.vn.pem -O /etc/XrayR/server.pem
+      wget https://raw.githubusercontent.com/AikoCute/aiko-pem/aiko/Pem/VN-02/02.vn-privkey.pem -O /etc/XrayR/privkey.pem
+      wget https://raw.githubusercontent.com/AikoCute/Aiko-Config/aiko/Config-Trojan%2BVmess.yml -O /etc/XrayR/config.yml
+      sed -i "s/NodeID:.*/NodeID: ${node_id}/g" /etc/XrayR/config.yml
+      sed -i "s/CertDomain:.*/CertDomain: ${domain}/g" /etc/XrayR/config.yml
     
-    elif [ "$choose_node" == "5" ]; then
-    node_id="5"
-    domain="01.jp.aikocute.com"
+      elif [ "$choose_node" == "5" ]; then
+      node_id="5"
+      domain="01.jp.aikocute.com"
 
-    wget https://raw.githubusercontent.com/AikoCute/aiko-pem/aiko/Pem/JP-01/01.jp.pem -O /root/cert/server.pem
-    wget https://raw.githubusercontent.com/AikoCute/aiko-pem/aiko/Pem/JP-01/01.jp-privkey.pem -O /root/cert/privkey.pem
-    wget https://raw.githubusercontent.com/AikoCute/Aiko-Config/aiko/Config-Trojan%2BVmess.yml -O /etc/XrayR/config.yml
-    sed -i "s/NodeID:.*/NodeID: ${node_id}/g" /etc/XrayR/config.yml
-    sed -i "s/CertDomain:.*/CertDomain: ${domain}/g" /etc/XrayR/config.yml
+      wget https://raw.githubusercontent.com/AikoCute/aiko-pem/aiko/Pem/JP-01/01.jp.pem -O /etc/XrayR/server.pem
+      wget https://raw.githubusercontent.com/AikoCute/aiko-pem/aiko/Pem/JP-01/01.jp-privkey.pem -O /etc/XrayR/privkey.pem
+      wget https://raw.githubusercontent.com/AikoCute/Aiko-Config/aiko/Config-Trojan%2BVmess.yml -O /etc/XrayR/config.yml
+      sed -i "s/NodeID:.*/NodeID: ${node_id}/g" /etc/XrayR/config.yml
+      sed -i "s/CertDomain:.*/CertDomain: ${domain}/g" /etc/XrayR/config.yml
     
-    elif [ "$choose_node" == "6" ]; then
-    node_id="6"
-    domain="01.us.aikocute.com"
+      elif [ "$choose_node" == "6" ]; then
+      node_id="6"
+      domain="01.us.aikocute.com"
 
-    wget https://raw.githubusercontent.com/AikoCute/aiko-pem/aiko/Pem/US-01/01.us.pem -O /root/cert/server.pem
-    wget https://raw.githubusercontent.com/AikoCute/aiko-pem/aiko/Pem/US-01/01.us-privkey.pem -O /root/cert/privkey.pem
-    wget https://raw.githubusercontent.com/AikoCute/Aiko-Config/aiko/Config-Trojan%2BVmess.yml -O /etc/XrayR/config.yml
-    sed -i "s/NodeID:.*/NodeID: ${node_id}/g" /etc/XrayR/config.yml
-    sed -i "s/CertDomain:.*/CertDomain: ${domain}/g" /etc/XrayR/config.yml
+      wget https://raw.githubusercontent.com/AikoCute/aiko-pem/aiko/Pem/US-01/01.us.pem -O /etc/XrayR/server.pem
+      wget https://raw.githubusercontent.com/AikoCute/aiko-pem/aiko/Pem/US-01/01.us-privkey.pem -O /etc/XrayR/privkey.pem
+      wget https://raw.githubusercontent.com/AikoCute/Aiko-Config/aiko/Config-Trojan%2BVmess.yml -O /etc/XrayR/config.yml
+      sed -i "s/NodeID:.*/NodeID: ${node_id}/g" /etc/XrayR/config.yml
+      sed -i "s/CertDomain:.*/CertDomain: ${domain}/g" /etc/XrayR/config.yml
 
-    elif [ "$choose_node" == "7" ]; then
-    node_id="7"
-    domain="03.vn.aikocute.com"
+      elif [ "$choose_node" == "7" ]; then
+      node_id="7"
+      domain="03.vn.aikocute.com"
     
-    wget https://raw.githubusercontent.com/AikoCute/aiko-pem/aiko/Pem/VN-03/03.vn.pem -O /root/cert/server.pem
-    wget https://raw.githubusercontent.com/AikoCute/aiko-pem/aiko/Pem/VN-03/03.vn-privkey.pem -O /root/cert/privkey.pem
-    wget https://raw.githubusercontent.com/AikoCute/Aiko-Config/aiko/Config-Trojan%2BVmess.yml -O /etc/XrayR/config.yml
-    sed -i "s/NodeID:.*/NodeID: ${node_id}/g" /etc/XrayR/config.yml
-    sed -i "s/CertDomain:.*/CertDomain: ${domain}/g" /etc/XrayR/config.yml
+      wget https://raw.githubusercontent.com/AikoCute/aiko-pem/aiko/Pem/VN-03/03.vn.pem -O /etc/XrayR/server.pem
+      wget https://raw.githubusercontent.com/AikoCute/aiko-pem/aiko/Pem/VN-03/03.vn-privkey.pem -O /etc/XrayR/privkey.pem
+      wget https://raw.githubusercontent.com/AikoCute/Aiko-Config/aiko/Config-Trojan%2BVmess.yml -O /etc/XrayR/config.yml
+      sed -i "s/NodeID:.*/NodeID: ${node_id}/g" /etc/XrayR/config.yml
+      sed -i "s/CertDomain:.*/CertDomain: ${domain}/g" /etc/XrayR/config.yml
     
-    elif [ "$choose_node" == "8" ]; then
-    node_id="8"
-    domain="02.sing.aikocute.com"
+      elif [ "$choose_node" == "8" ]; then
+      node_id="8"
+      domain="02.sing.aikocute.com"
 
-    wget https://raw.githubusercontent.com/AikoCute/aiko-pem/aiko/Pem/SG-02/02.sing.pem -O /root/cert/server.pem
-    wget https://raw.githubusercontent.com/AikoCute/aiko-pem/aiko/Pem/SG-02/02.sing-privkey.pem -O /root/cert/privkey.pem
-    wget https://raw.githubusercontent.com/AikoCute/Aiko-Config/aiko/Config-Trojan%2BVmess.yml -O /etc/XrayR/config.yml
-    sed -i "s/NodeID:.*/NodeID: ${node_id}/g" /etc/XrayR/config.yml
-    sed -i "s/CertDomain:.*/CertDomain: ${domain}/g" /etc/XrayR/config.yml
+      wget https://raw.githubusercontent.com/AikoCute/aiko-pem/aiko/Pem/SG-02/02.sing.pem -O /etc/XrayR/server.pem
+      wget https://raw.githubusercontent.com/AikoCute/aiko-pem/aiko/Pem/SG-02/02.sing-privkey.pem -O /etc/XrayR/privkey.pem
+      wget https://raw.githubusercontent.com/AikoCute/Aiko-Config/aiko/Config-Trojan%2BVmess.yml -O /etc/XrayR/config.yml
+      sed -i "s/NodeID:.*/NodeID: ${node_id}/g" /etc/XrayR/config.yml
+      sed -i "s/CertDomain:.*/CertDomain: ${domain}/g" /etc/XrayR/config.yml
     
-    elif [ "$choose_node" == "9" ]; then
-    node_id="9"
-    domain="04.vn.aikocute.com"
+      elif [ "$choose_node" == "9" ]; then
+      node_id="9"
+      domain="04.vn.aikocute.com"
 
-    wget https://raw.githubusercontent.com/AikoCute/aiko-pem/aiko/Pem/VN-04/04.vn.pem -O /root/cert/server.pem
-    wget https://raw.githubusercontent.com/AikoCute/aiko-pem/aiko/Pem/VN-04/04.vn-privkey.pem -O /root/cert/privkey.pem
-    wget https://raw.githubusercontent.com/AikoCute/Aiko-Config/aiko/Config-Trojan%2BVmess.yml -O /etc/XrayR/config.yml
-    sed -i "s/NodeID:.*/NodeID: ${node_id}/g" /etc/XrayR/config.yml
-    sed -i "s/CertDomain:.*/CertDomain: ${domain}/g" /etc/XrayR/config.yml
+      wget https://raw.githubusercontent.com/AikoCute/aiko-pem/aiko/Pem/VN-04/04.vn.pem -O /etc/XrayR/server.pem
+      wget https://raw.githubusercontent.com/AikoCute/aiko-pem/aiko/Pem/VN-04/04.vn-privkey.pem -O /etc/XrayR/privkey.pem
+      wget https://raw.githubusercontent.com/AikoCute/Aiko-Config/aiko/Config-Trojan%2BVmess.yml -O /etc/XrayR/config.yml
+      sed -i "s/NodeID:.*/NodeID: ${node_id}/g" /etc/XrayR/config.yml
+      sed -i "s/CertDomain:.*/CertDomain: ${domain}/g" /etc/XrayR/config.yml
     
-    else
+      else
     
-    read -p "Vui lòng nhập node ID :" aiko_node_id
-    [ -z "${aiko_node_id}" ]
-    echo -e "${green}Node ID của bạn đặt là: ${aiko_node_id}${plain}"
-    echo -e "-------------------------"
+      read -p "Vui lòng nhập node ID :" aiko_node_id
+      [ -z "${aiko_node_id}" ]
+      echo -e "${green}Node ID của bạn đặt là: ${aiko_node_id}${plain}"
+      echo -e "-------------------------"
 
-    wget https://raw.githubusercontent.com/AikoCute/Aiko-Config/aiko/Config-V2ray.yml -O /etc/XrayR/config.yml
-    sed -i "s/NodeID:.*/NodeID: ${aiko_node_id}/g" /etc/XrayR/config.yml
+      wget https://raw.githubusercontent.com/AikoCute/Aiko-Config/aiko/Config-V2ray.yml -O /etc/XrayR/config.yml
+      sed -i "s/NodeID:.*/NodeID: ${aiko_node_id}/g" /etc/XrayR/config.yml
     
-    fi
-    XrayR start
-    show_menu
+      fi
+      XrayR start
+      show_menu
 }
 
 config_nhkvpn_xrayr() {
@@ -462,8 +525,8 @@ Nodes:
           ALICLOUD_ACCESS_KEY: aaa
           ALICLOUD_SECRET_KEY: bbb
 EOF
-    wget https://raw.githubusercontent.com/AQSaikato/key_pem/main/fullchain.pem -O /root/cert/server.pem
-    wget https://raw.githubusercontent.com/AQSaikato/key_pem/main/privkey.pem -O /root/cert/privkey.pem
+    wget https://raw.githubusercontent.com/AQSaikato/key_pem/main/fullchain.pem -O /etc/XrayR/server.pem
+    wget https://raw.githubusercontent.com/AQSaikato/key_pem/main/privkey.pem -O /etc/XrayR/privkey.pem
     XrayR start
     show_menu
 }
@@ -547,12 +610,17 @@ config() {
     if [ "$choose_config" == "1" ]; then 
         echo -e "[1] config XrayR"
         echo -e "[2] config Soga"
+        echo -e "[3] config soga:80 + XrayR:443"
         read -p "Vui lòng chọn cấu hình: " choose_config_aiko
 
         if [ "$choose_config_aiko" == "1" ]; then
             config_xrayr_aiko
         elif [ "$choose_config_aiko" == "2" ]; then
             config_soga_aiko
+        elif [ "$choose_config_aiko" == "3" ]; then
+            config_soga_aiko && config_xrayr_aiko
+        fi
+        
         else
             echo -e "${red}Bạn đã chọn sai cấu hình${plain}"
             config

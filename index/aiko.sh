@@ -20,11 +20,11 @@ install() {
         bash <(curl -ls https://raw.githubusercontent.com/AikoCute/XrayR-release/data/install.sh)
         show_menu
     elif [ "$installv1" == "2" ]; then
-        bash <(curl -Ls https://raw.githubusercontent.com/vaxilu/soga/master/install.sh)
+        bash <(curl -Ls https://raw.githubusercontent.com/AikoCute/Soga/aiko/install.sh)
         show_menu
     elif [ "$installv1" == "3" ]; then
         bash <(curl -ls https://raw.githubusercontent.com/AikoCute/XrayR-release/data/install.sh) &&
-        bash <(curl -Ls https://raw.githubusercontent.com/vaxilu/soga/master/install.sh)
+        bash <(curl -Ls https://raw.githubusercontent.com/AikoCute/Soga/aiko/install.sh)
         show_menu
     elif [ "$installv1" == "4" ]; then
         bash <(curl -Ls https://raw.githubusercontent.com/herotbty/X-ui/master/install.sh)

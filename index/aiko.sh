@@ -738,7 +738,7 @@ speedtest() {
 unlock_port() {
     echo -e "[1] Ubuntu"
     echo -e "[2] Debian"
-    echi -e "[3] CentOS"
+    echo -e "[3] CentOS"
     read -p "Vui lòng chọn cấu hình: " unlock_port_v1
     read -p "Vui lòng nhập port cần mở: " port
 

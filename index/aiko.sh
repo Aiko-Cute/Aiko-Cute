@@ -678,6 +678,7 @@ status() {
     echo -e "[1] Khởi động XrayR"
     echo -e "[2] Khởi động lại XrayR"
     echo -e "[3] XrayR log"
+    echo -e "[4] Gỡ cài đặt XrayR"
     read -p "Vui lòng chọn cấu hình: " choose_status_v1
 
     if [ "$choose_status_v1" == "1" ]; then 
@@ -686,8 +687,10 @@ status() {
       XrayR restart
     elif [ "$choose_status_v1" == "3" ]; then 
       XrayR log
+    elif [ "$choose_status_v1" == "4" ]; then
+      XrayR uninstall
     else
-      echo -e "${red}Bạn đã chọn sai, vui lòng chọn lại [1-3]${plain}"
+      echo -e "${red}Bạn đã chọn sai, vui lòng chọn lại [1-4]${plain}"
       status
     fi
 
@@ -695,6 +698,7 @@ status() {
     echo -e "[1] Khởi động Soga"
     echo -e "[2] Khởi động lại Soga"
     echo -e "[3] Soga log"
+    echo -e "[4] Gỡ cài đặt Soga"
     read -p "Vui lòng chọn cấu hình: " choose_status_v2
 
     if [ "$choose_status_v2" == "1" ]; then 
@@ -703,16 +707,12 @@ status() {
       soga restart
     elif [ "$choose_status_v2" == "3" ]; then 
       soga log
+    elif [ "$choose_status_v2" == "4" ]; then
+      soga uninstall
     else
-      echo -e "${red}Bạn đã chọn sai, vui lòng chọn lại [1-3]${plain}"
+      echo -e "${red}Bạn đã chọn sai, vui lòng chọn lại [1-4]${plain}"
       status
     fi
-
-  else
-    echo -e "${red}Bạn đã chọn sai, vui lòng chọn lại [1-2]${plain}"
-    status
-  fi
-
 }
 
 config_xrayr(){
@@ -745,6 +745,7 @@ unlock_port() {
     if [ "$unlock_port_v1" == "1" ]; then 
         ufw allow $port/tcp
         ufw allow $port/udp
+        ufw allow reload
     elif [ "$unlock_port_v1" == "2" ]; then 
         iptables -A INPUT -m state --state NEW -m tcp -p tcp --dport $port -j ACCEPT
         iptables -A INPUT -m state --state NEW -m udp -p udp --dport $port -j ACCEPT

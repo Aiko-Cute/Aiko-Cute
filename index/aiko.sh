@@ -713,6 +713,10 @@ status() {
       echo -e "${red}Bạn đã chọn sai, vui lòng chọn lại [1-4]${plain}"
       status
     fi
+  else
+    echo -e "${red}Bạn đã chọn sai, vui lòng chọn lại [1-2]${plain}"
+    status
+  fi
 }
 
 config_xrayr(){

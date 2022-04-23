@@ -8,6 +8,24 @@ plain='\033[0m'
 # check root
 [[ $EUID -ne 0 ]] && echo -e "${red}Lỗi: ${plain} Bắt đầu lại với quyền root！\n" && exit 1
 
+if [[ -f /etc/redhat-release ]]; then
+    release="centos"
+elif cat /etc/issue | grep -Eqi "debian"; then
+    release="debian"
+elif cat /etc/issue | grep -Eqi "ubuntu"; then
+    release="ubuntu"
+elif cat /etc/issue | grep -Eqi "centos|red hat|redhat"; then
+    release="centos"
+elif cat /proc/version | grep -Eqi "debian"; then
+    release="debian"
+elif cat /proc/version | grep -Eqi "ubuntu"; then
+    release="ubuntu"
+elif cat /proc/version | grep -Eqi "centos|red hat|redhat"; then
+    release="centos"
+else
+    echo -e "${red}Phiên bản hệ thống không được phát hiện, vui lòng liên hệ với tác giả kịch bản!${plain}\n" && exit 1
+fi
+
 install() {
     echo -e "-------------------------"
     echo -e "1. Cài đặt ${green}XrayR${plain}"
@@ -33,6 +51,46 @@ install() {
     show_menu
     fi
 }
+
+check_status_xrayr() {
+    if [[ ! -f /etc/systemd/system/XrayR.service ]]; then
+        return 2
+    fi
+    temp=$(systemctl status XrayR | grep Active | awk '{print $3}' | cut -d "(" -f2 | cut -d ")" -f1)
+    if [[ x"${temp}" == x"running" ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+show_log_xrayr() {
+    journalctl -u XrayR.service -e --no-pager -f
+    if [[ $# == 0 ]]; then
+        before_show_menu
+    fi
+}
+
+# 0: running, 1: not running, 2: not installed
+check_status_soga() {
+    if [[ ! -f /etc/systemd/system/soga.service ]]; then
+        return 2
+    fi
+    temp=$(systemctl status soga | grep Active | awk '{print $3}' | cut -d "(" -f2 | cut -d ")" -f1)
+    if [[ x"${temp}" == x"running" ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+show_log_soga() {
+    journalctl -u soga.service -e --no-pager
+    if [[ $# == 0 ]]; then
+        show_menu
+    fi
+}
+
 
 config_aikovpn_xrayr() {
     echo -e "[1] Config Trojan"
@@ -495,14 +553,14 @@ Nodes:
       CertConfig:
         CertMode: file # Option about how to get certificate: none, file, http, dns. Choose "none" will forcedly disable the tls config.
         CertDomain: "$CertDomain_aq" # Domain to cert
-        CertFile: /etc/XrayR/cert/fullchain.cert # Provided if the CertMode is file
-        KeyFile: /etc/XrayR/cert/privkey.key
+        CertFile: /etc/XrayR/server.pem # Provided if the CertMode is file
+        KeyFile: /etc/XrayR/privkey.pem
         Provider: alidns # DNS cert provider, Get the full support list here: https://go-acme.github.io/lego/dns/
         Email: test@me.com
         DNSEnv: # DNS ENV option used by DNS provider
           ALICLOUD_ACCESS_KEY: aaa
           ALICLOUD_SECRET_KEY: bbb
-  -
+-
     PanelType: "V2board" # Panel type: SSpanel, V2board, PMpanel, Proxypanel
     ApiConfig:
       ApiHost: "https://aqvpn.me/"
@@ -536,8 +594,8 @@ Nodes:
       CertConfig:
         CertMode: none # Option about how to get certificate: none, file, http, dns. Choose "none" will forcedly disable the tls config.
         CertDomain: "$CertDomain_aq" # Domain to cert
-        CertFile: /etc/XrayR/cert/fullchain.cert # Provided if the CertMode is file
-        KeyFile: /etc/XrayR/cert/privkey.key
+        CertFile: /etc/XrayR/server.pem # Provided if the CertMode is file
+        KeyFile: /etc/XrayR/privkey.pem
         Provider: alidns # DNS cert provider, Get the full support list here: https://go-acme.github.io/lego/dns/
         Email: test@me.com
         DNSEnv: # DNS ENV option used by DNS provider
@@ -617,7 +675,7 @@ EOF
 soga start
 }
 
-config() {
+setting_config() {
     echo -e "-------------------------"
     echo -e "[1] Aiko : aikocute.com"
     echo -e "[2] nhkvpn : nhkvpn.net"
@@ -625,7 +683,7 @@ config() {
     echo -e "[4] Show config"
     echo -e "-------------------------"
     read -p "Vui lòng chọn Web lên sever: " choose_config
-    echo -e "${green}Bạn đã chọn Web : ${choose}${plain}"
+    echo -e "${green}Bạn đã chọn Web : ${choose_config}${plain}"
 
     if [ "$choose_config" == "1" ]; then 
         echo -e "[1] config XrayR"
@@ -655,9 +713,9 @@ config() {
         read -p "Vui lòng chọn config phù hợp: " choose_config_v1
 
         if [ "$choose_config_v1" == "1" ]; then 
-            nano /etc/XrayR/config.yml
+            config_xrayr
         elif [ "$choose_config_v1" == "2" ]; then 
-            nano /etc/soga/soga.conf
+            config_soga
         else
             echo -e "${red}Bạn đã chọn sai, vui lòng chọn lại [1-2]${plain}"
             config
@@ -720,11 +778,47 @@ status() {
 }
 
 config_xrayr(){
-  nano etc/XrayR/config.yml
+    echo "XrayR sẽ tự động khởi động lại sau khi sửa đổi cấu hình"
+    nano /etc/XrayR/config.yml
+    sleep 2
+    check_status_xrayr
+    case $? in
+        0)
+            echo -e "Trạng thái XrayR: ${green}đã được chạy${plain}"
+            ;;
+        1)
+            echo -e "Nó được phát hiện rằng bạn không khởi động XrayR hoặc XrayR không tự khởi động lại, hãy kiểm tra nhật ký？[Y/n]" && echo
+            read -e -p "(yes or no):" yn
+            [[ -z ${yn} ]] && yn="y"
+            if [[ ${yn} == [Yy] ]]; then
+               show_log_xrayr
+            fi
+            ;;
+        2)
+            echo -e "Trạng thái XrayR: ${red}Chưa cài đặt${plain}"
+    esac
 }
 
 config_soga(){
-  nano etc/soga/soga.conf
+  echo "Soga sẽ tự khởi động lại sau khi sửa đổi cấu hình"
+    nano /etc/soga/soga.conf
+    sleep 2
+    check_status_soga
+    case $? in
+        0)
+            echo -e "Trạng thái soga: ${green}đã được chạy${plain}"
+            ;;
+        1)
+            echo -e "Nó được phát hiện rằng bạn không khởi động soga hoặc soga không tự khởi động lại, hãy kiểm tra nhật ký？[Y/n]" && echo
+            read -e -p "(yes or no):" yn
+            [[ -z ${yn} ]] && yn="y"
+            if [[ ${yn} == [Yy] ]]; then
+               show_log_soga
+            fi
+            ;;
+        2)
+            echo -e "Trạng thái XrayR: ${red}Chưa cài đặt${plain}"
+    esac
 }
 
 xrayr_old_config(){
@@ -739,31 +833,61 @@ speedtest() {
     wget -qO- --no-check-certificate https://raw.githubusercontent.com/oooldking/script/master/superbench.sh | bash
 }
 
-unlock_port() {
-    echo -e "[1] Ubuntu"
-    echo -e "[2] Debian"
-    echo -e "[3] CentOS"
-    read -p "Vui lòng chọn cấu hình: " unlock_port_v1
-    read -p "Vui lòng nhập port cần mở: " port
 
-    if [ "$unlock_port_v1" == "1" ]; then 
-        ufw allow $port/tcp
-        ufw allow $port/udp
-        ufw allow reload
-    elif [ "$unlock_port_v1" == "2" ]; then 
-        iptables -A INPUT -m state --state NEW -m tcp -p tcp --dport $port -j ACCEPT
-        iptables -A INPUT -m state --state NEW -m udp -p udp --dport $port -j ACCEPT
+unlock_port() {
+    echo -e "[1] Mở Port"
+    echo -e "[2] Check trạng thái cổng"
+    read -p "Vui lòng chọn: " choose_unlock_port
+
+    if [ "$choose_unlock_port" == "1" ]; then 
+      read -p "Vui lòng nhập port cần mở: " port_unlock
+        if [ "$release" == "ubuntu" ]; then 
+        ufw enable
+        ufw allow $port_unlock/tcp
+        ufw allow $port_unlock/udp
+        ufw reload
+        elif [ "$release" == "debian" ]; then 
+        iptables -A INPUT -m state --state NEW -m tcp -p tcp --dport $port_unlock -j ACCEPT
+        iptables -A INPUT -m state --state NEW -m udp -p udp --dport $port_unlock -j ACCEPT
         /etc/init.d/iptables save
         /etc/init.d/iptables restart
-    elif [ "$unlock_port_v1" == "3" ]; then 
-        firewall-cmd --zone=public --add-port=$port/tcp --permanent
-        firewall-cmd --zone=public --add-port=$port/udp --permanent
+        elif [ "$release" == "centos" ]; then 
+        systemctl start firewalld
+        firewall-cmd --zone=public --add-port=$port_unlock/tcp --permanent
+        firewall-cmd --zone=public --add-port=$port_unlock/udp --permanent
         firewall-cmd --reload
+        fi
+        echo -e "Port $port_unlock đã được mở"
+        echo -e "Nhấn [Enter] để tiếp tục"
+        read -p ""
+        show_menu
+    elif [ "$choose_unlock_port" == "2" ]; then
+      if [ "$release" == "ubuntu" ]; then 
+        ufw status
+        echo -e "Nhấn [Enter] để tiếp tục"
+        read -p ""
+        show_menu
+      elif [ "$release" == "debian" ]; then 
+        iptables -L
+        echo -e "Nhấn [Enter] để tiếp tục"
+        read -p ""
+        show_menu
+      elif [ "$release" == "centos" ]; then 
+        firewall-cmd --list-all
+        echo -e "Nhấn [Enter] để tiếp tục"
+        read -p ""
+        show_menu
+      else
+        echo -e "Nhấn [Enter] để tiếp tục"
+        read -p ""
+        show_menu
+      fi
     else
-        echo -e "${red}Bạn đã chọn sai, vui lòng chọn lại [1-3]${plain}"
-        unlock_port
+      echo -e "${red}Bạn đã chọn sai, vui lòng chọn lại [1-2]${plain}"
+      unlock_port
     fi
-}
+}      
+
 
 show_menu() {
     echo -e "
@@ -788,7 +912,7 @@ show_menu() {
         ;;
         1) install
         ;;
-        2) config
+        2) setting_config
         ;;
         3) status
         ;;

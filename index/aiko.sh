@@ -38,14 +38,14 @@ install() {
     if ["${installv1}" == "0" ]; then
         exit 0
     elif [ "$installv1" == "1" ]; then 
-        bash <(curl -ls https://raw.githubusercontent.com/AikoCute/XrayR-release/data/install.sh)
+        bash <(curl -ls https://raw.githubusercontent.com/AikoXrayR-Project/AikoXrayR-install/data/install-beta.sh)
         show_menu
     elif [ "$installv1" == "2" ]; then
-        bash <(curl -Ls https://raw.githubusercontent.com/AikoCute/Soga/aiko/install.sh)
+        bash <(curl -Ls https://raw.githubusercontent.com/AikoCute/Aiko-Soga/aiko/install.sh)
         show_menu
     elif [ "$installv1" == "3" ]; then
-        bash <(curl -ls https://raw.githubusercontent.com/AikoCute/XrayR-release/data/install.sh) &&
-        bash <(curl -Ls https://raw.githubusercontent.com/AikoCute/Soga/aiko/install.sh)
+        bash <(curl -ls https://raw.githubusercontent.com/AikoXrayR-Project/AikoXrayR-install/data/install-beta.sh) &&
+        bash <(curl -Ls https://raw.githubusercontent.com/AikoCute/Aiko-Soga/aiko/install.sh)
         show_menu
     elif [ "$installv1" == "4" ]; then
         bash <(curl -Ls https://raw.githubusercontent.com/herotbty/X-ui/master/install.sh)
@@ -105,16 +105,16 @@ config_aikovpn_xrayr() {
     if [ "$config_aikovpn_xrayr_v1" == "0" ]; then
         show_menu
     elif [ "$config_aikovpn_xrayr_v1" == "1" ]; then
-        bash <(curl -Ls https://raw.githubusercontent.com/AikoCute/File-For-Aiko/master/xrayr/config_trojan.sh)
+        bash <(curl -Ls https://raw.githubusercontent.com/AikoCute/FileAiko/master/xrayr/config_trojan.sh)
         show_menu
     elif [ "$config_aikovpn_xrayr_v1" == "2" ]; then
-        bash <(curl -Ls https://raw.githubusercontent.com/AikoCute/File-For-Aiko/master/xrayr/config_v2ray.sh)
+        bash <(curl -Ls https://raw.githubusercontent.com/AikoCute/FileAiko/master/xrayr/config_v2ray.sh)
         show_menu
     elif [ "$config_aikovpn_xrayr_v1" == "3" ]; then
-        bash <(curl -Ls https://raw.githubusercontent.com/AikoCute/File-For-Aiko/master/xrayr/config_trojan-v2ray.sh)
+        bash <(curl -Ls https://raw.githubusercontent.com/AikoCute/FileAiko/master/xrayr/config_trojan-v2ray.sh)
         show_menu
     elif [ "$config_aikovpn_xrayr_v1" == "4" ]; then
-        bash <(curl -Ls https://raw.githubusercontent.com/AikoCute/File-For-Aiko/master/xrayr/config_aiko.sh)
+        bash <(curl -Ls https://raw.githubusercontent.com/AikoCute/FileAiko/master/xrayr/config_aiko.sh)
         show_menu
     else
         config_aikovpn_xrayr
@@ -123,19 +123,19 @@ show_menu
 }     
 
 config_nhkvpn_xrayr() {
-  bash <(curl -ls https://raw.githubusercontent.com/AikoCute/File-For-Aiko/master/xrayr_nhk/config_nhk.sh)
+  bash <(curl -ls https://raw.githubusercontent.com/AikoCute/FileAiko/master/xrayr_nhk/config_nhk.sh)
   XrayR start
   show_menu
 }
 
 config_aqvpn_xrayr() {
-  bash <(curl -ls https://raw.githubusercontent.com/AikoCute/File-For-Aiko/master/aqvpn/config_aqvpn_xrayr.sh)
+  bash <(curl -ls https://raw.githubusercontent.com/AikoCute/FileAiko/master/aqvpn/config_aqvpn_xrayr.sh)
   XrayR start
   show_menu
 }
 
 config_soga_aiko(){
-  bash <(curl -ls https://raw.githubusercontent.com/AikoCute/File-For-Aiko/master/soga/config_soga_aiko.sh)
+  bash <(curl -ls https://raw.githubusercontent.com/AikoCute/FileAiko/master/soga/config_soga_aiko.sh)
   show_menu
 }
 
@@ -306,7 +306,7 @@ unlock_port() {
     if [ "$unlock_port_choose" == "0" ]; then 
       show_menu
     elif [ "$unlock_port_choose" == "1" ]; then 
-      bash <(curl -L -s https://raw.githubusercontent.com/AikoCute/File-For-Aiko/master/unlock_port.sh)
+      bash <(curl -L -s https://raw.githubusercontent.com/AikoCute/FileAiko/master/unlock_port.sh)
       unlock_port
     else
       echo -e "${red}Bạn đã chọn sai, vui lòng chọn lại [1-2]${plain}"

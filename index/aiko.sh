@@ -34,10 +34,10 @@ install() {
     echo -e "3. Cài đặt ${green}Soga-XrayR${plain}"
     echo -e "4. Cài đặt ${green}X-ui${plain}"
     read -p "Vui lòng chọn config cấu hình: " installv1
-    
+
     if ["${installv1}" == "0" ]; then
         exit 0
-    elif [ "$installv1" == "1" ]; then 
+    elif [ "$installv1" == "1" ]; then
         bash <(curl -ls https://raw.githubusercontent.com/AikoXrayR-Project/AikoXrayR-install/data/install-beta.sh)
         show_menu
     elif [ "$installv1" == "2" ]; then
@@ -45,13 +45,13 @@ install() {
         show_menu
     elif [ "$installv1" == "3" ]; then
         bash <(curl -ls https://raw.githubusercontent.com/AikoXrayR-Project/AikoXrayR-install/data/install-beta.sh) &&
-        bash <(curl -Ls https://raw.githubusercontent.com/AikoCute/Aiko-Soga/aiko/install.sh)
+            bash <(curl -Ls https://raw.githubusercontent.com/AikoCute/Aiko-Soga/aiko/install.sh)
         show_menu
     elif [ "$installv1" == "4" ]; then
         bash <(curl -Ls https://raw.githubusercontent.com/herotbty/X-ui/master/install.sh)
     else
-    install
-    show_menu
+        install
+        show_menu
     fi
 }
 
@@ -94,7 +94,6 @@ show_log_soga() {
     fi
 }
 
-
 config_aikovpn_xrayr() {
     echo -e "[0] Thoát"
     echo -e "[1] Config Trojan"
@@ -119,24 +118,24 @@ config_aikovpn_xrayr() {
     else
         config_aikovpn_xrayr
     fi
-show_menu
-}     
+    show_menu
+}
 
 config_nhkvpn_xrayr() {
-  bash <(curl -ls https://raw.githubusercontent.com/AikoCute/FileAiko/master/xrayr_nhk/config_nhk.sh)
-  XrayR start
-  show_menu
+    bash <(curl -ls https://raw.githubusercontent.com/AikoCute/FileAiko/master/xrayr_nhk/config_nhk.sh)
+    XrayR start
+    show_menu
 }
 
 config_aqvpn_xrayr() {
-  bash <(curl -ls https://raw.githubusercontent.com/AikoCute/FileAiko/master/aqvpn/config_aqvpn_xrayr.sh)
-  XrayR start
-  show_menu
+    bash <(curl -ls https://raw.githubusercontent.com/AikoCute/FileAiko/master/aqvpn/config_aqvpn_xrayr.sh)
+    XrayR start
+    show_menu
 }
 
-config_soga_aiko(){
-  bash <(curl -ls https://raw.githubusercontent.com/AikoCute/FileAiko/master/soga/config_soga_aiko.sh)
-  show_menu
+config_soga_aiko() {
+    bash <(curl -ls https://raw.githubusercontent.com/AikoCute/FileAiko/master/soga/config_soga_aiko.sh)
+    show_menu
 }
 
 setting_config() {
@@ -149,7 +148,7 @@ setting_config() {
     read -p "Vui lòng chọn Web lên sever: " choose_config
     echo -e "${green}Bạn đã chọn Web : ${choose_config}${plain}"
 
-    if [ "$choose_config" == "1" ]; then 
+    if [ "$choose_config" == "1" ]; then
         echo -e "[1] config XrayR"
         echo -e "[2] config Soga"
         echo -e "[3] config soga:80 + XrayR:443"
@@ -166,9 +165,9 @@ setting_config() {
             echo -e "${red}Bạn đã chọn sai cấu hình${plain}"
             config
         fi
-    elif [ "$choose_config" == "2" ]; then 
+    elif [ "$choose_config" == "2" ]; then
         config_nhkvpn_xrayr
-    elif [ "$choose_config" == "3" ]; then 
+    elif [ "$choose_config" == "3" ]; then
         config_aqvpn_xrayr
     elif [ "$choose_config" == "4" ]; then
         echo -e "-------------------------"
@@ -176,9 +175,9 @@ setting_config() {
         echo -e "[2] config soga "
         read -p "Vui lòng chọn config phù hợp: " choose_config_v1
 
-        if [ "$choose_config_v1" == "1" ]; then 
+        if [ "$choose_config_v1" == "1" ]; then
             config_xrayr
-        elif [ "$choose_config_v1" == "2" ]; then 
+        elif [ "$choose_config_v1" == "2" ]; then
             config_soga
         else
             echo -e "${red}Bạn đã chọn sai, vui lòng chọn lại [1-2]${plain}"
@@ -188,106 +187,105 @@ setting_config() {
         echo -e "${red}Bạn đã chọn sai, vui lòng chọn lại [1-4]${plain}"
         config
     fi
-  show_menu
+    show_menu
 }
 
 status() {
-  echo "[1] XrayR"
-  echo "[2] Soga"
-  read -p "Vui lòng chọn cấu hình: " choose_status
+    echo "[1] XrayR"
+    echo "[2] Soga"
+    read -p "Vui lòng chọn cấu hình: " choose_status
 
-  if [ "$choose_status" == "1" ]; then 
-    echo -e "[1] Khởi động XrayR"
-    echo -e "[2] Khởi động lại XrayR"
-    echo -e "[3] XrayR log"
-    echo -e "[4] Gỡ cài đặt XrayR"
-    read -p "Vui lòng chọn cấu hình: " choose_status_v1
+    if [ "$choose_status" == "1" ]; then
+        echo -e "[1] Khởi động XrayR"
+        echo -e "[2] Khởi động lại XrayR"
+        echo -e "[3] XrayR log"
+        echo -e "[4] Gỡ cài đặt XrayR"
+        read -p "Vui lòng chọn cấu hình: " choose_status_v1
 
-    if [ "$choose_status_v1" == "1" ]; then 
-      XrayR start
-    elif [ "$choose_status_v1" == "2" ]; then 
-      XrayR restart
-    elif [ "$choose_status_v1" == "3" ]; then 
-      XrayR log
-    elif [ "$choose_status_v1" == "4" ]; then
-      XrayR uninstall
+        if [ "$choose_status_v1" == "1" ]; then
+            XrayR start
+        elif [ "$choose_status_v1" == "2" ]; then
+            XrayR restart
+        elif [ "$choose_status_v1" == "3" ]; then
+            XrayR log
+        elif [ "$choose_status_v1" == "4" ]; then
+            XrayR uninstall
+        else
+            echo -e "${red}Bạn đã chọn sai, vui lòng chọn lại [1-4]${plain}"
+            status
+        fi
+
+    elif [ "$choose_status" == "2" ]; then
+        echo -e "[1] Khởi động Soga"
+        echo -e "[2] Khởi động lại Soga"
+        echo -e "[3] Soga log"
+        echo -e "[4] Gỡ cài đặt Soga"
+        read -p "Vui lòng chọn cấu hình: " choose_status_v2
+
+        if [ "$choose_status_v2" == "1" ]; then
+            soga start
+        elif [ "$choose_status_v2" == "2" ]; then
+            soga restart
+        elif [ "$choose_status_v2" == "3" ]; then
+            soga log
+        elif [ "$choose_status_v2" == "4" ]; then
+            soga uninstall
+        else
+            echo -e "${red}Bạn đã chọn sai, vui lòng chọn lại [1-4]${plain}"
+            status
+        fi
     else
-      echo -e "${red}Bạn đã chọn sai, vui lòng chọn lại [1-4]${plain}"
-      status
+        echo -e "${red}Bạn đã chọn sai, vui lòng chọn lại [1-2]${plain}"
+        status
     fi
-
-  elif [ "$choose_status" == "2" ]; then 
-    echo -e "[1] Khởi động Soga"
-    echo -e "[2] Khởi động lại Soga"
-    echo -e "[3] Soga log"
-    echo -e "[4] Gỡ cài đặt Soga"
-    read -p "Vui lòng chọn cấu hình: " choose_status_v2
-
-    if [ "$choose_status_v2" == "1" ]; then 
-      soga start
-    elif [ "$choose_status_v2" == "2" ]; then 
-      soga restart
-    elif [ "$choose_status_v2" == "3" ]; then 
-      soga log
-    elif [ "$choose_status_v2" == "4" ]; then
-      soga uninstall
-    else
-      echo -e "${red}Bạn đã chọn sai, vui lòng chọn lại [1-4]${plain}"
-      status
-    fi
-  else
-    echo -e "${red}Bạn đã chọn sai, vui lòng chọn lại [1-2]${plain}"
-    status
-  fi
 }
 
-config_xrayr(){
+config_xrayr() {
     echo "XrayR sẽ tự động khởi động lại sau khi sửa đổi cấu hình"
     nano /etc/XrayR/config.yml
     sleep 2
     check_status_xrayr
     case $? in
-        0)
-            echo -e "Trạng thái XrayR: ${green}đã được chạy${plain}"
-            ;;
-        1)
-            echo -e "Nó được phát hiện rằng bạn không khởi động XrayR hoặc XrayR không tự khởi động lại, hãy kiểm tra nhật ký？[Y/n]" && echo
-            read -e -p "(yes or no):" yn
-            [[ -z ${yn} ]] && yn="y"
-            if [[ ${yn} == [Yy] ]]; then
-               show_log_xrayr
-            fi
-            ;;
-        2)
-            echo -e "Trạng thái XrayR: ${red}Chưa cài đặt${plain}"
+    0)
+        echo -e "Trạng thái XrayR: ${green}đã được chạy${plain}"
+        ;;
+    1)
+        echo -e "Nó được phát hiện rằng bạn không khởi động XrayR hoặc XrayR không tự khởi động lại, hãy kiểm tra nhật ký？[Y/n]" && echo
+        read -e -p "(yes or no):" yn
+        [[ -z ${yn} ]] && yn="y"
+        if [[ ${yn} == [Yy] ]]; then
+            show_log_xrayr
+        fi
+        ;;
+    2)
+        echo -e "Trạng thái XrayR: ${red}Chưa cài đặt${plain}"
+        ;;
     esac
 }
 
-config_soga(){
-  echo "Soga sẽ tự khởi động lại sau khi sửa đổi cấu hình"
+config_soga() {
+    echo "Soga sẽ tự khởi động lại sau khi sửa đổi cấu hình"
     nano /etc/soga/soga.conf
     sleep 2
     check_status_soga
     case $? in
-        0)
-            echo -e "Trạng thái soga: ${green}đã được chạy${plain}"
-            ;;
-        1)
-            echo -e "Nó được phát hiện rằng bạn không khởi động soga hoặc soga không tự khởi động lại, hãy kiểm tra nhật ký？[Y/n]" && echo
-            read -e -p "(yes or no):" yn
-            [[ -z ${yn} ]] && yn="y"
-            if [[ ${yn} == [Yy] ]]; then
-               show_log_soga
-            fi
-            ;;
-        2)
-            echo -e "Trạng thái XrayR: ${red}Chưa cài đặt${plain}"
+    0)
+        echo -e "Trạng thái soga: ${green}đã được chạy${plain}"
+        ;;
+    1)
+        echo -e "Nó được phát hiện rằng bạn không khởi động soga hoặc soga không tự khởi động lại, hãy kiểm tra nhật ký？[Y/n]" && echo
+        read -e -p "(yes or no):" yn
+        [[ -z ${yn} ]] && yn="y"
+        if [[ ${yn} == [Yy] ]]; then
+            show_log_soga
+        fi
+        ;;
+    2)
+        echo -e "Trạng thái XrayR: ${red}Chưa cài đặt${plain}"
+        ;;
     esac
 }
 
-xrayr_old_config(){
-    bash <(curl -ls https://raw.githubusercontent.com/Aiko-Cute/Aiko-Cute/aiko/aiko.sh)
-}
 
 install_bbr() {
     bash <(curl -L -s https://raw.githubusercontent.com/aikoCute/BBR/aiko/tcp.sh)
@@ -297,23 +295,7 @@ speedtest() {
     wget -qO- --no-check-certificate https://raw.githubusercontent.com/oooldking/script/master/superbench.sh | bash
 }
 
-
-unlock_port() {
-    echo -e "[0] Thoát"
-    echo -e "[1] Thao tác Port"
-    read -p "Vui lòng chọn cấu hình: " unlock_port_choose
-
-    if [ "$unlock_port_choose" == "0" ]; then 
-      show_menu
-    elif [ "$unlock_port_choose" == "1" ]; then 
-      bash <(curl -L -s https://raw.githubusercontent.com/AikoCute/FileAiko/master/unlock_port.sh)
-      unlock_port
-    else
-      echo -e "${red}Bạn đã chọn sai, vui lòng chọn lại [1-2]${plain}"
-      unlock_port
-    fi
-}      
-
+    
 
 show_menu() {
     echo -e "
@@ -324,33 +306,38 @@ show_menu() {
   ${green}1.${plain} Cài đặt Backend
   ${green}2.${plain} Cập nhật config
   ${green}3.${plain} Trạng thái Backend
-  ${green}4.${plain} XrayR 1 Lần chạy (Aiko-NHK-AQVPN)
 ————————————————
-  ${green}5.${plain} Mở port VPS
-  ${green}6.${plain} Cài đặt BBR
-  ${green}7.${plain} Speedtest VPS
+  ${green}4.${plain} docker_run < aikocute >
+  ${green}5.${plain} Cài đặt BBR
+  ${green}6.${plain} Speedtest VPS
  "
- #Các bản cập nhật tiếp theo có thể được thêm vào chuỗi trên
+    #Các bản cập nhật tiếp theo có thể được thêm vào chuỗi trên
     echo && read -p "Vui lòng nhập lựa chọn [0-7]: " num
 
     case "${num}" in
-        0) exit 0
+    0)
+        exit 0
         ;;
-        1) install
+    1)
+        install
         ;;
-        2) setting_config
+    2)
+        setting_config
         ;;
-        3) status
+    3)
+        status
         ;;
-        4) xrayr_old_config
+    4)
+        unlock_port_menu
         ;;
-        5) unlock_port
+    5)
+        install_bbr
         ;;
-        6) install_bbr
+    6)
+        speedtest
         ;;
-        7) speedtest
-        ;;
-        *) echo -e "${red}Vui lòng nhập số chính xác [0-6]${plain}"
+    *)
+        echo -e "${red}Vui lòng nhập số chính xác [0-6]${plain}"
         ;;
     esac
 }

@@ -73,7 +73,6 @@ speedtest.midco.net
 speedtest.xfinity.com
 speedtest.googlefiber.net
 speedtestcustom.com
-
 EOF
     echo -e "${green}Cài đặt AikoBlock thành công！${plain}\n"
     show_menu

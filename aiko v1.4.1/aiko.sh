@@ -36,6 +36,48 @@ update(){
     show_menu
 }
 
+install_AikoBlock(){
+    cat <<EOF >/etc/XrayR/AikoBlock
+catport.vn
+cloudfast.vn
+zingfast.net
+zingfast.vn
+speedtest.net
+fast.com
+speedtest.vn
+speedsmart.net
+speedcheck.org
+speedof.me
+testmy.net
+bandwidthplace.com
+speed.io
+measurementlab.net
+i-speed.vn
+speedtest.vnpt.vn
+speedtest.vtn.com.vn
+nperf.com
+speedtest.telstra.com
+merter.net
+ping-test.net
+devicetests.com
+speedtest.com.sg
+speed.cloudflare.com
+speedtest.vinahost.vn
+thinkbroadband.com
+speedtestcustom.com
+speedtest.vegacdn.com
+ooklaserver.net
+speedtest.cesnet.cz
+speakeasy.net
+speedtest.midco.net
+speedtest.xfinity.com
+speedtest.googlefiber.net
+speedtestcustom.com
+
+EOF
+    echo -e "${green}Cài đặt AikoBlock thành công！${plain}\n"
+    show_menu
+}
 
 check_status_xrayr() {
     if [[ ! -f /etc/systemd/system/XrayR.service ]]; then
@@ -234,11 +276,11 @@ show_menu() {
   ${green}1.${plain} Cài đặt XrayR
   ${green}2.${plain} Cập nhật config
   ${green}3.${plain} Trạng thái Backend
+  ${green}4.${plain} Cài đặt AikoBLock
+  ${green}5.${plain} Update XrayR
 ————————————————
-  ${green}4.${plain} docker_run < aikocute >
-  ${green}5.${plain} Cài đặt BBR
-  ${green}6.${plain} Speedtest VPS
-  ${green}7.${plain} Update XrayR
+  ${green}6.${plain} Cài đặt BBR
+  ${green}7.${plain} Speedtest VPS
  "
     #Các bản cập nhật tiếp theo có thể được thêm vào chuỗi trên
     echo && read -p "Vui lòng nhập lựa chọn [0-7]: " num
@@ -257,16 +299,16 @@ show_menu() {
         status
         ;;
     4)
-        unlock_port_menu
+        install_AikoBlock
         ;;
     5)
-        install_bbr
+        update
         ;;
     6)
-        speedtest
+        install_bbr
         ;;
     7) 
-        update
+        speedtest
         ;;
     *)
         echo -e "${red}Vui lòng nhập số chính xác [0-6]${plain}"

@@ -27,7 +27,7 @@ else
 fi
 
 install() {
-    bash <(curl -ls https://raw.githubusercontent.com/AikoXrayR-Project/AikoXrayR-install/data/install-beta.sh)
+    bash <(curl -ls https://raw.githubusercontent.com/AikoXrayR-Project/AikoXrayR-install/dev/install.sh)
     show_menu
 }
 

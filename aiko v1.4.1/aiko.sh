@@ -281,6 +281,7 @@ show_menu() {
 ————————————————
   ${green}6.${plain} Cài đặt BBR
   ${green}7.${plain} Speedtest VPS
+  ${green}8.${plain} Cài đặt chứng chỉ TLS
  "
     #Các bản cập nhật tiếp theo có thể được thêm vào chuỗi trên
     echo && read -p "Vui lòng nhập lựa chọn [0-7]: " num
@@ -310,8 +311,11 @@ show_menu() {
     7) 
         speedtest
         ;;
+    8)
+        install_certficate
+        ;;
     *)
-        echo -e "${red}Vui lòng nhập số chính xác [0-6]${plain}"
+        echo -e "${red}Vui lòng nhập số chính xác [0-8]${plain}"
         ;;
     esac
 }
